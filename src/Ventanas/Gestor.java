@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class Gestor 
 {
     private MainWindow main;
+    private Statics statics;
     private String title;
     private Image icon;
 
@@ -28,10 +29,15 @@ public class Gestor
     {
         this.title="JAR Analyzer";
         this.icon=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/jar.png"));
-        this.main= new MainWindow(title,icon);
+        this.main= new MainWindow(title,icon,this);
+        this.statics= new Statics(title,icon,this);
     }
     public void showMain()
     {
         this.main.setVisible(true);
+    }
+    public void showStatics()
+    {
+        this.statics.setVisible(true);
     }
 }

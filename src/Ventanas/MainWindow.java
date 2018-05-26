@@ -6,8 +6,7 @@
 package Ventanas;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.*;
 import javax.swing.*;
 
 /**
@@ -22,7 +21,10 @@ public class MainWindow extends JFrame
     private Color borderColor;
     private Font font;
     private Image returt;
-    public MainWindow(String title,Image icono)
+    private JFileChooser fileChooser;
+    private File lastFile;
+    private Gestor gestor;
+    public MainWindow(String title,Image icono,Gestor gestor)
     {
         this.title=title;
         this.icon=icono;
@@ -30,6 +32,8 @@ public class MainWindow extends JFrame
         this.borderColor= new Color(57,61,63);
         this.font= font;
         this.returt=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/beet.png"));
+        this.gestor= gestor;
+        this.fileChooser= new JFileChooser();
         Init();   
     }
     /**
@@ -92,6 +96,15 @@ public class MainWindow extends JFrame
         Add.setForeground(Color.BLACK);
         Add.setBounds(0,100,300,65);
         Add.setFocusPainted(false);
+        Add.addActionListener(e->{
+        
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) 
+            {
+                lastFile = fileChooser.getSelectedFile();
+                System.out.println(lastFile);
+
+            }
+        });
         Panel1.add(Add);
         
         JButton Stats= new JButton("JAR Statistics");
@@ -101,6 +114,10 @@ public class MainWindow extends JFrame
         Stats.setBounds(0,165+65,300,65);
         Stats.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
         Stats.setFocusPainted(false);
+        Stats.addActionListener(e->{
+            dispose();
+            gestor.showStatics();
+        });
         Panel1.add(Stats);
         
         JButton Generate= new JButton("Generate!");
