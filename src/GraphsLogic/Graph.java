@@ -83,8 +83,4 @@ public class Graph{
       return roadT;
     }
   }
-
-  public static void main(String args[]){
-
-  }
 }
