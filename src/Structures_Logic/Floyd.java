@@ -1,12 +1,12 @@
 
-package GraphsLogic;
+package Structures_Logic;
 
 /**
  *
  * @author dgarcia
  */
-public class Graph{
-  public Graph(){
+public class Floyd{
+  public Floyd(){
 
   }
 
