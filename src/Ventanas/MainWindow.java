@@ -8,6 +8,7 @@ package Ventanas;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Ventana principal de la aplicacion.
@@ -34,6 +35,11 @@ public class MainWindow extends JFrame
         this.returt=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/beet.png"));
         this.gestor= gestor;
         this.fileChooser= new JFileChooser();
+        FileNameExtensionFilter JARfilter = new FileNameExtensionFilter("Jar Files","jar");
+        FileNameExtensionFilter JAVAfilter = new FileNameExtensionFilter("Java Files","java");
+        fileChooser.setFileFilter(JARfilter);
+        fileChooser.addChoosableFileFilter(JAVAfilter);
+        fileChooser.setAcceptAllFileFilterUsed(false);
         Init();   
     }
     /**
@@ -101,6 +107,7 @@ public class MainWindow extends JFrame
             if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) 
             {
                 lastFile = fileChooser.getSelectedFile();
+                System.out.println(lastFile.getName());
                 System.out.println(lastFile);
 
             }

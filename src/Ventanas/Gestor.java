@@ -5,14 +5,8 @@
  */
 package Ventanas;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Calse encargada de instanciar el gestor de ventanas.
@@ -22,8 +16,9 @@ public class Gestor
 {
     private MainWindow main;
     private Statics statics;
-    private String title;
-    private Image icon;
+    private Display display;
+    private final String title;
+    private final Image icon;
 
     public Gestor()
     {
@@ -31,6 +26,7 @@ public class Gestor
         this.icon=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/jar.png"));
         this.main= new MainWindow(title,icon,this);
         this.statics= new Statics(title,icon,this);
+        this.display= new Display(title,icon,this);
     }
     public void showMain()
     {
@@ -38,6 +34,18 @@ public class Gestor
     }
     public void showStatics()
     {
+        try 
+        {
+            this.statics.refresh();
+            this.statics.generate();
+        } catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
         this.statics.setVisible(true);
+    }
+    public void showDisplay()
+    {
+        this.display.setVisible(true);
     }
 }

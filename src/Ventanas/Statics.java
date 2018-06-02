@@ -5,7 +5,13 @@
  */
 package Ventanas;
 
+import Statics.Rank;
+import Structures_Interface.LinkedList;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.*;
+import java.io.InputStreamReader;
+import java.util.Scanner;
 import javax.swing.*;
 
 /**
@@ -17,11 +23,17 @@ public class Statics extends JFrame
     private String title;
     private Image icon;
     private Gestor gestor;
+    private JList depList;
+    private LinkedList depends;
+    DefaultListModel dep;
     public Statics(String title, Image icon, Gestor gestor)
     {
         this.icon= icon;
         this.title= title;
         this.gestor= gestor;
+        this.dep = new DefaultListModel();
+        this.depList= new JList(dep);
+        this.depends= new LinkedList();
         this.Init();
     }
     public void Init()
@@ -88,5 +100,34 @@ public class Statics extends JFrame
         mostRef.add(mostRefL,BorderLayout.LINE_START);
         
         
+        depList.setBackground(Color.DARK_GRAY);
+        depList.setBounds(4,60,412,496);
+        depList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
+        depList.setForeground(Color.BLACK);
+        mostRef.add(depList);
+        
+        
+    }
+    /**
+     * Metodo para generar las listas de ranking.
+     * @throws FileNotFoundException 
+     */
+    public void generate() throws FileNotFoundException
+   {
+        File file= new File("src/Resources/Estadisticas/Dependencias.txt");
+        Scanner input = new Scanner(file);
+        while (input.hasNextLine()) 
+        {
+            String linea= input.nextLine();
+            String [] array= linea.split("@");
+            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
+            depends.add(elemento);
+            dep.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getDep());
+        }
+        depends.printAll();
+   }
+    public void refresh()
+    {
+        dep.removeAllElements();
     }
 }
