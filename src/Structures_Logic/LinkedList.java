@@ -12,6 +12,7 @@ package Structures_Logic;
  * @author dgarcia
  */
 public class LinkedList {
+    
     private int size; // largo de la lista
     private Node head,tail; // cabeza de la lista
     /**

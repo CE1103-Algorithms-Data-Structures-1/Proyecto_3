@@ -5,7 +5,13 @@
  */
 package Ventanas;
 
+import Statics.Rank;
+import Structures_Interface.LinkedList;
 import java.awt.*;
+import java.io.*;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -17,13 +23,28 @@ public class Statics extends JFrame
     private String title;
     private Image icon;
     private Gestor gestor;
+    private JList depList;
+    private JList refList;
+    private LinkedList depends;
+    private LinkedList refers;
+    DefaultListModel dep;
+    DefaultListModel ref;
     public Statics(String title, Image icon, Gestor gestor)
     {
         this.icon= icon;
         this.title= title;
         this.gestor= gestor;
+        this.dep = new DefaultListModel();
+        this.ref= new DefaultListModel();
+        this.depList= new JList(dep);
+        this.refList= new JList(ref);
+        this.depends= new LinkedList();
+        this.refers= new LinkedList();
         this.Init();
     }
+    /**
+     * Metodo que inicializa las caracteristicas de la ventana.
+     */
     public void Init()
     {
         this.setSize(new Dimension(1000,700));
@@ -78,7 +99,7 @@ public class Statics extends JFrame
         mostRef.setLayout(null);
         this.add(mostRef);
         
-        JLabel mostRefL= new JLabel(" Analyzed JARS with the Most Referenes:");
+        JLabel mostRefL= new JLabel(" Analyzed JARS with the Most References:");
         mostRefL.setBackground(new Color(0,184,0));
         mostRefL.setFont(mostRefL.getFont().deriveFont(Font.BOLD,18));
         mostRefL.setForeground(new Color(31,31,31));
@@ -88,5 +109,102 @@ public class Statics extends JFrame
         mostRef.add(mostRefL,BorderLayout.LINE_START);
         
         
+        depList.setBackground(Color.DARK_GRAY);
+        depList.setBounds(4,60,412,496);
+        depList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
+        depList.setForeground(Color.BLACK);
+        mostDep.add(depList);
+        
+        refList.setBackground(Color.DARK_GRAY);
+        refList.setBounds(4,60,412,496);
+        refList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
+        refList.setForeground(Color.BLACK);
+        mostRef.add(refList);
+        
+        
     }
+    /**
+     * Metodo para generar las listas de ranking.
+     * @throws FileNotFoundException 
+     */
+    public void generate() throws FileNotFoundException
+   {
+        File file= new File("src\\Resources\\Estadisticas\\Dependencias.txt");
+        Scanner input = new Scanner(file);
+        while (input.hasNextLine()) 
+        {
+            String linea= input.nextLine();
+            String [] array= linea.split("@");
+            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
+            depends.add(elemento);
+            dep.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getDep());
+        }
+        
+        File filer= new File("src\\Resources\\Estadisticas\\Referencias.txt");
+        Scanner inputr = new Scanner(filer);
+        while (inputr.hasNextLine()) 
+        {
+            String linea= inputr.nextLine();
+            String [] array= linea.split("@");
+            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
+            refers.add(elemento);
+            ref.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getRef());
+        }
+        refers.addInorderRef(new Rank(15,1,0,"PORONGA.jar"));
+        try 
+        {
+            save();
+        } catch (IOException ex) 
+        {
+            Logger.getLogger(Statics.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+   }
+    /**
+     * Metodo para reiniciar los datos de las listas de estadistica. 
+     */
+    public void refresh()
+    {
+        dep.removeAllElements();
+        ref.removeAllElements();
+        depends.clear();
+        refers.clear();
+    }
+    /**
+     * Metodo para guardar el ranking.
+     */
+    public void save() throws FileNotFoundException, IOException
+    {
+        File file= new File("src/Resources/Estadisticas/Dependencias.txt");
+        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        writer.print("");
+        writer.close();
+        FileOutputStream fos = new FileOutputStream(file);
+	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+	int ind=0;
+        while(ind!=depends.getLen())
+        {
+            bw.write(depends.get(ind));
+            bw.newLine();
+            ind++;
+        }
+	bw.close();
+        
+        file= new File("src/Resources/Estadisticas/Referencias.txt");
+        writer = new PrintWriter(new FileWriter(file));
+        writer.print("");
+        writer.close();
+        fos = new FileOutputStream(file);
+	bw = new BufferedWriter(new OutputStreamWriter(fos));
+	ind=0;
+        while(ind!=refers.getLen())
+        {
+            bw.write(refers.get(ind));
+            bw.newLine();
+            ind++;
+        }
+	bw.close();
+    }
+    
 }
