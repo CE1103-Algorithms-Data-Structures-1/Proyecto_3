@@ -5,6 +5,8 @@
  */
 package Structures_Logic;
 
+import java.io.File;
+
 /**
  * Clase Graph es la clase en donde se agreganlos vertices para 
  * la creacion en si del grafo
@@ -29,6 +31,18 @@ public class Graph {
      */
     public void init(String name){
         this.insert(name);
+        
+        File[] array;
+        File f = new File(name);
+        
+        array = f.listFiles();
+        if(array!=null){
+        for(int i = 0;i < array.length; i++){
+            this.insert(array[i].getName(),this.lisfOFVertex.getHead().getVertex().getID());
+        }}else{
+            System.out.println("el archivo no posee contenido");
+        }
+        this.showGraph();        
     }
     private void insert(String name){
         insert(name,"");
@@ -47,6 +61,13 @@ public class Graph {
      */
     public void showGraph(){
         this.see();
+    }
+    /**
+     * Retorna la lista enlazada de vertices del grafo
+     * @return atributo listOFVertex
+     */
+    public LinkedList getListOFVertex(){
+        return this.lisfOFVertex;
     }
     
     

@@ -1,0 +1,8 @@
+como utilizar jars
+http://www.devx.com/tips/java/reading-contents-of-a-jar-file-using-java.-170629013043.html
+operaciones en jars
+https://docs.oracle.com/javase/tutorial/deployment/jar/basicsindex.html
+grados salientes y entrantes de un grafo
+https://www.geeksforgeeks.org/find-degree-particular-vertex-graph/
+vertice de un grafo con peso
+https://stackoverflow.com/questions/15178064/add-a-vertex-to-the-graph
