@@ -24,16 +24,22 @@ public class Statics extends JFrame
     private Image icon;
     private Gestor gestor;
     private JList depList;
+    private JList refList;
     private LinkedList depends;
+    private LinkedList refers;
     DefaultListModel dep;
+    DefaultListModel ref;
     public Statics(String title, Image icon, Gestor gestor)
     {
         this.icon= icon;
         this.title= title;
         this.gestor= gestor;
         this.dep = new DefaultListModel();
+        this.ref= new DefaultListModel();
         this.depList= new JList(dep);
+        this.refList= new JList(ref);
         this.depends= new LinkedList();
+        this.refers= new LinkedList();
         this.Init();
     }
     public void Init()
@@ -90,7 +96,7 @@ public class Statics extends JFrame
         mostRef.setLayout(null);
         this.add(mostRef);
         
-        JLabel mostRefL= new JLabel(" Analyzed JARS with the Most Referenes:");
+        JLabel mostRefL= new JLabel(" Analyzed JARS with the Most References:");
         mostRefL.setBackground(new Color(0,184,0));
         mostRefL.setFont(mostRefL.getFont().deriveFont(Font.BOLD,18));
         mostRefL.setForeground(new Color(31,31,31));
@@ -104,7 +110,13 @@ public class Statics extends JFrame
         depList.setBounds(4,60,412,496);
         depList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
         depList.setForeground(Color.BLACK);
-        mostRef.add(depList);
+        mostDep.add(depList);
+        
+        refList.setBackground(Color.DARK_GRAY);
+        refList.setBounds(4,60,412,496);
+        refList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
+        refList.setForeground(Color.BLACK);
+        mostRef.add(refList);
         
         
     }
@@ -125,9 +137,26 @@ public class Statics extends JFrame
             dep.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getDep());
         }
         depends.printAll();
+        
+        File filer= new File("src/Resources/Estadisticas/Referencias.txt");
+        Scanner inputr = new Scanner(filer);
+        while (inputr.hasNextLine()) 
+        {
+            String linea= inputr.nextLine();
+            String [] array= linea.split("@");
+            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
+            refers.add(elemento);
+            ref.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getRef());
+        }
+        refers.printAll();
+        
+        
    }
     public void refresh()
     {
         dep.removeAllElements();
+        ref.removeAllElements();
+        depends.clear();
+        refers.clear();
     }
 }

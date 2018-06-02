@@ -67,4 +67,9 @@ public class LinkedList
         }
         System.out.println(this.len);
     }
+    public void clear()
+    {
+        this.head=null;
+        this.len=0;
+    }
 }

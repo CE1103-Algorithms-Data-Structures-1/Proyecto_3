@@ -9,7 +9,7 @@ import Ventanas.Gestor;
 
 /**
  *
- * @author dcama
+ * @author Daniel Camacho
  */
 public class Main
 {
