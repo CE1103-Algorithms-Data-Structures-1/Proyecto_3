@@ -8,10 +8,10 @@ package Ventanas;
 import Statics.Rank;
 import Structures_Interface.LinkedList;
 import java.awt.*;
-import java.io.BufferedReader;
 import java.io.*;
-import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -42,6 +42,9 @@ public class Statics extends JFrame
         this.refers= new LinkedList();
         this.Init();
     }
+    /**
+     * Metodo que inicializa las caracteristicas de la ventana.
+     */
     public void Init()
     {
         this.setSize(new Dimension(1000,700));
@@ -136,7 +139,6 @@ public class Statics extends JFrame
             depends.add(elemento);
             dep.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getDep());
         }
-        depends.printAll();
         
         File filer= new File("src/Resources/Estadisticas/Referencias.txt");
         Scanner inputr = new Scanner(filer);
@@ -148,10 +150,20 @@ public class Statics extends JFrame
             refers.add(elemento);
             ref.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getRef());
         }
-        refers.printAll();
+        refers.addInorderRef(new Rank(15,1,0,"PORONGA.jar"));
+        try 
+        {
+            save();
+        } catch (IOException ex) 
+        {
+            Logger.getLogger(Statics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
    }
+    /**
+     * Metodo para reiniciar los datos de las listas de estadistica. 
+     */
     public void refresh()
     {
         dep.removeAllElements();
@@ -159,4 +171,40 @@ public class Statics extends JFrame
         depends.clear();
         refers.clear();
     }
+    /**
+     * Metodo para guardar el ranking.
+     */
+    public void save() throws FileNotFoundException, IOException
+    {
+        File file= new File("src/Resources/Estadisticas/Dependencias.txt");
+        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        writer.print("");
+        writer.close();
+        FileOutputStream fos = new FileOutputStream(file);
+	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+	int ind=0;
+        while(ind!=depends.getLen())
+        {
+            bw.write(depends.get(ind));
+            bw.newLine();
+            ind++;
+        }
+	bw.close();
+        
+        file= new File("src/Resources/Estadisticas/Referencias.txt");
+        writer = new PrintWriter(new FileWriter(file));
+        writer.print("");
+        writer.close();
+        fos = new FileOutputStream(file);
+	bw = new BufferedWriter(new OutputStreamWriter(fos));
+	ind=0;
+        while(ind!=refers.getLen())
+        {
+            bw.write(refers.get(ind));
+            bw.newLine();
+            ind++;
+        }
+	bw.close();
+    }
+    
 }
