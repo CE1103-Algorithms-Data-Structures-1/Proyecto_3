@@ -5,10 +5,7 @@
  */
 package Main;
 
-import Structures_Logic.Graph;
 import Ventanas.Gestor;
-import java.io.IOException;
-import org.apache.bcel.classfile.ClassFormatException;
 
 /**
  *
@@ -20,13 +17,10 @@ public class Main
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException, ClassFormatException, ClassNotFoundException 
+    public static void main(String[] args) 
     {
-//        Gestor gestor= new Gestor();
-//        gestor.showMain();
-        Graph g = new Graph();
-        g.init("bcel-5.2.jar");
-
+        Gestor gestor= new Gestor();
+        gestor.showMain();
     }
     
 }
