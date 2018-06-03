@@ -23,6 +23,13 @@ public class MainWindow extends JFrame
     private Font font;
     private Image returt;
     private JFileChooser fileChooser;
+    private JPanel statusBar;
+    private JLabel fileName;
+    private JLabel Status;
+    private JLabel Completeness;
+    private JButton classTab;
+    private JButton jarTab;
+    private JButton allTab;
     private File lastFile;
     private Gestor gestor;
     public MainWindow(String title,Image icono,Gestor gestor)
@@ -40,6 +47,13 @@ public class MainWindow extends JFrame
         fileChooser.setFileFilter(JARfilter);
         fileChooser.addChoosableFileFilter(JAVAfilter);
         fileChooser.setAcceptAllFileFilterUsed(false);
+        statusBar= new JPanel();
+        fileName= new JLabel();
+        Status= new JLabel();
+        classTab= new JButton();
+        jarTab= new JButton();
+        allTab= new JButton();
+        Completeness= new JLabel();
         Init();   
     }
     /**
@@ -107,6 +121,8 @@ public class MainWindow extends JFrame
             if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) 
             {
                 lastFile = fileChooser.getSelectedFile();
+                this.refresh();
+                
                 System.out.println(lastFile.getName());
                 System.out.println(lastFile);
 
@@ -154,6 +170,106 @@ public class MainWindow extends JFrame
         Copyright.setForeground(Color.BLACK);
         Copyright.setBounds(60,620,1000,100);
         Panel1.add(Copyright);
+        
+        
+        statusBar.setBounds(300,25,1000,28);
+        statusBar.setBackground(new Color(0,184,0));
+        this.add(statusBar);
+        
+        
+        fileName.setText("NO FILE SELECTED");
+        fileName.setBounds(0,0,800,28);
+        fileName.setFont(fileName.getFont().deriveFont(Font.BOLD,15));
+        statusBar.add(fileName);
+        
+        Status.setFont(Status.getFont().deriveFont(Font.BOLD,15));
+       
+        Completeness.setFont(Completeness.getFont().deriveFont(Font.BOLD,15));
+        
+        classTab.addActionListener(e->{
+                classTab.setBackground(new Color(235,60,1));
+                classTab.setForeground(Color.BLACK);
+                classTab.setEnabled(false);
+                
+                jarTab.setEnabled(true);
+                jarTab.setBackground(new Color(0,184,0));
+                
+                allTab.setEnabled(true);
+                allTab.setBackground(new Color(0,184,0));
+            
+        });
+        
+        jarTab.addActionListener(e->{
+                jarTab.setBackground(new Color(235,60,1));
+                jarTab.setForeground(Color.BLACK);
+                jarTab.setEnabled(false);
+                
+                classTab.setEnabled(true);
+                classTab.setBackground(new Color(0,184,0));
+                
+                allTab.setEnabled(true);
+                allTab.setBackground(new Color(0,184,0));
+            
+        });
+        allTab.addActionListener(e->{
+                allTab.setBackground(new Color(235,60,1));
+                allTab.setForeground(Color.BLACK);
+                allTab.setEnabled(false);
+                
+                jarTab.setEnabled(true);
+                jarTab.setBackground(new Color(0,184,0));
+                
+                classTab.setEnabled(true);
+                classTab.setBackground(new Color(0,184,0));
+            
+        });
+        
+        
+    }
+    /**
+     * Metodo para actualizar la pantalla.
+     */
+    public void refresh()
+    {
+        statusBar.setLayout(null);
+        statusBar.add(Status);
+        statusBar.add(Completeness);
+        
+        fileName.setText(lastFile.getName());
+        fileName.setBounds(0,0,800,28);
+        
+        Completeness.setBounds(880,0,147,28);
+        Completeness.setText("UNKNOWN");
+        
+        Status.setBounds(800,0,53,28);
+        Status.setText("Status: ");
+        
+        this.add(classTab);
+        classTab.setBounds(1065,675,85,26);
+        classTab.setBackground(new Color(235,60,1));
+        classTab.setBorder(BorderFactory.createMatteBorder(2,2,2,2,borderColor));
+        classTab.setText("Classes");
+        classTab.setFocusPainted(false);
+        classTab.setForeground(Color.BLACK);
+        
+        this.add(jarTab);
+        jarTab.setBounds(1140,675,85,26);
+        jarTab.setBackground(new Color(0,184,0));
+        jarTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        jarTab.setText("Jar's");
+        jarTab.setFocusPainted(false);
+        jarTab.setForeground(Color.BLACK);
+       
+        this.add(allTab);
+        allTab.setBounds(1215,675,85,26);
+        allTab.setBackground(new Color(0,184,0));
+        allTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        allTab.setText("All Files");
+        allTab.setFocusPainted(false);
+        allTab.setForeground(Color.BLACK);
+        
+        
+        
     }
   
 }
