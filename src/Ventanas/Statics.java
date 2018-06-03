@@ -129,7 +129,7 @@ public class Statics extends JFrame
      */
     public void generate() throws FileNotFoundException
    {
-        File file= new File("src/Resources/Estadisticas/Dependencias.txt");
+        File file= new File("src\\Resources\\Estadisticas\\Dependencias.txt");
         Scanner input = new Scanner(file);
         while (input.hasNextLine()) 
         {
@@ -143,7 +143,7 @@ public class Statics extends JFrame
             }
         }
         
-        File filer= new File("src/Resources/Estadisticas/Referencias.txt");
+        File filer= new File("src\\Resources\\Estadisticas\\Referencias.txt");
         Scanner inputr = new Scanner(filer);
         while (inputr.hasNextLine()) 
         {

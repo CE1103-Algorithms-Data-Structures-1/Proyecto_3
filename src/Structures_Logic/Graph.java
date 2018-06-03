@@ -5,6 +5,11 @@
  */
 package Structures_Logic;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.jar.JarFile;
+import org.apache.bcel.classfile.ClassFormatException;
+
 /**
  * Clase Graph es la clase en donde se agreganlos vertices para 
  * la creacion en si del grafo
@@ -24,11 +29,38 @@ public class Graph {
         this.size = 0; // se inicia el numero de vertices en 0
     }
     /**
-     * Inicializa el grafo con el Vertice inicial
+     * Inicializa el grafo utilizando un archivo de extencion jar
      * @param name id del vertice a agregar
      */
-    public void init(String name){
+    public void init(String name) throws IOException, ClassFormatException, ClassNotFoundException{
         this.insert(name);
+        String path = "C:\\Users\\dgarcia\\Desktop\\";
+        File[] array;
+        JarFile f = new JarFile(path+name);
+        ReferenceFinder rf = new ReferenceFinder();
+        rf.findReferences(path+name, f);
+        
+        
+       
+//        array = f.listFiles();
+        
+//        if(array!=null){
+//            
+//            if(array[0].getName().toLowerCase().endsWith(".jar")){
+//
+//                for(int i = 0;i < array.length; i++){
+//                    this.insert(array[i].getName(),this.lisfOFVertex.getHead().getVertex().getID());
+//
+//                        }            
+//            }else if(array[0].getName().toLowerCase().endsWith(".java")){
+//            
+//            }   
+//        
+//        }else{
+//            System.out.println("el archivo no posee contenido");
+//        }
+        
+        this.showGraph();        
     }
     private void insert(String name){
         insert(name,"");
@@ -47,6 +79,13 @@ public class Graph {
      */
     public void showGraph(){
         this.see();
+    }
+    /**
+     * Retorna la lista enlazada de vertices del grafo
+     * @return atributo listOFVertex
+     */
+    public LinkedList getListOFVertex(){
+        return this.lisfOFVertex;
     }
     
     

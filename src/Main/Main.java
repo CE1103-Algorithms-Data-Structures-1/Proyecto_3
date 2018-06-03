@@ -21,7 +21,6 @@ public class Main
     {
         Gestor gestor= new Gestor();
         gestor.showMain();
-
     }
     
 }
