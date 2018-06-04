@@ -16,29 +16,36 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class MainWindow extends JFrame
 {
-    private String title;
-    private Image icon;
-    private Color backColor;
-    private Color borderColor;
-    private Font font;
-    private Image returt;
-    private JFileChooser fileChooser;
-    private JPanel statusBar;
-    private JLabel fileName;
-    private JLabel Status;
-    private JLabel Completeness;
-    private JButton classTab;
-    private JButton jarTab;
-    private JButton allTab;
+    private final String title;
+    private final Image icon;
+    private final Color backColor;
+    private final Color borderColor;
+    private final Image returt;
+    private final JFileChooser fileChooser;
+    private final JLayeredPane mainPanel;
+    private final JPanel statusBar;
+    private final JLabel fileName;
+    private final JLabel Status;
+    private final JLabel Completeness;
+    private final JButton Complete;
+    private final JButton classTab;
+    private final JButton jarTab;
+    private final JButton allTab;
+    private final JButton missingTab;
     private File lastFile;
-    private Gestor gestor;
+    private final Gestor gestor;
+    private DefaultListModel classList;
+    private DefaultListModel jarList;
+    private DefaultListModel allFileList;
+    private DefaultListModel missingList;
+    private JList mainList;
+    
     public MainWindow(String title,Image icono,Gestor gestor)
     {
         this.title=title;
         this.icon=icono;
         this.backColor= new Color(31,31,31);
         this.borderColor= new Color(57,61,63);
-        this.font= font;
         this.returt=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/beet.png"));
         this.gestor= gestor;
         this.fileChooser= new JFileChooser();
@@ -53,7 +60,15 @@ public class MainWindow extends JFrame
         classTab= new JButton();
         jarTab= new JButton();
         allTab= new JButton();
+        missingTab= new JButton();
         Completeness= new JLabel();
+        this.mainList= new JList();
+        this.classList= new DefaultListModel();
+        this.jarList= new DefaultListModel();
+        this.allFileList= new DefaultListModel();
+        this.missingList= new DefaultListModel();
+        this.Complete= new JButton("Complete using Maven™");
+        this.mainPanel= new JLayeredPane();
         Init();   
     }
     /**
@@ -70,6 +85,13 @@ public class MainWindow extends JFrame
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(backColor);
         this.setLayout(null);
+        
+        
+        mainPanel.setBackground(backColor);
+        mainPanel.setBounds(300,53,1000,646);
+        mainPanel.setOpaque(true);
+        mainPanel.setLayout(null);
+        this.add(mainPanel);
         
         JPanel Bar= new JPanel();
         Bar.setSize(new Dimension(1300,25));
@@ -112,7 +134,7 @@ public class MainWindow extends JFrame
         JButton Add= new JButton("Add JAR file");
         Add.setBackground(new Color(0,184,0));
         Add.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
-        Add.setFont(Add.getFont().deriveFont(font.BOLD,28));
+        Add.setFont(Add.getFont().deriveFont(Font.BOLD,28));
         Add.setForeground(Color.BLACK);
         Add.setBounds(0,100,300,65);
         Add.setFocusPainted(false);
@@ -132,7 +154,7 @@ public class MainWindow extends JFrame
         
         JButton Stats= new JButton("JAR Statistics");
         Stats.setBackground(new Color(0,184,0));
-        Stats.setFont(Stats.getFont().deriveFont(font.BOLD,28));
+        Stats.setFont(Stats.getFont().deriveFont(Font.BOLD,28));
         Stats.setForeground(Color.BLACK);
         Stats.setBounds(0,165+65,300,65);
         Stats.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
@@ -145,7 +167,7 @@ public class MainWindow extends JFrame
         
         JButton Generate= new JButton("Generate!");
         Generate.setBackground(new Color(0,184,0));
-        Generate.setFont(Generate.getFont().deriveFont(font.BOLD,28));
+        Generate.setFont(Generate.getFont().deriveFont(Font.BOLD,28));
         Generate.setForeground(Color.BLACK);
         Generate.setBounds(0,360,300,65);
         Generate.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
@@ -159,6 +181,21 @@ public class MainWindow extends JFrame
             
         });
         Panel1.add(Generate);
+        
+        
+        Complete.setBackground(Color.DARK_GRAY);
+        Complete.setFont(Complete.getFont().deriveFont(Font.BOLD,20));
+        Complete.setForeground(Color.BLACK);
+        Complete.setBounds(0,490,300,65);
+        Complete.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
+        Complete.setFocusPainted(false);
+        Complete.setEnabled(false);
+        Complete.addActionListener(e->{
+                
+                
+            
+        });
+        Panel1.add(Complete);
         
         JLabel returtL= new JLabel();
         returtL.setIcon(new ImageIcon(this.returt));
@@ -196,7 +233,12 @@ public class MainWindow extends JFrame
                 
                 allTab.setEnabled(true);
                 allTab.setBackground(new Color(0,184,0));
-            
+                
+                missingTab.setEnabled(true);
+                missingTab.setBackground(new Color(0,184,0));
+                
+                fileName.setText(lastFile.getName()+"/Classes");
+                mainList.setModel(classList);
         });
         
         jarTab.addActionListener(e->{
@@ -209,7 +251,12 @@ public class MainWindow extends JFrame
                 
                 allTab.setEnabled(true);
                 allTab.setBackground(new Color(0,184,0));
-            
+                
+                missingTab.setEnabled(true);
+                missingTab.setBackground(new Color(0,184,0));
+                
+                fileName.setText(lastFile.getName()+"/Jars");
+                mainList.setModel(jarList);
         });
         allTab.addActionListener(e->{
                 allTab.setBackground(new Color(235,60,1));
@@ -221,8 +268,36 @@ public class MainWindow extends JFrame
                 
                 classTab.setEnabled(true);
                 classTab.setBackground(new Color(0,184,0));
+                
+                missingTab.setEnabled(true);
+                missingTab.setBackground(new Color(0,184,0));
+                
+                fileName.setText(lastFile.getName()+"/All Files");
+                mainList.setModel(allFileList);
             
         });
+        
+        missingTab.addActionListener(e->{
+                missingTab.setBackground(new Color(235,60,1));
+                missingTab.setForeground(Color.BLACK);
+                missingTab.setEnabled(false);
+                
+                jarTab.setEnabled(true);
+                jarTab.setBackground(new Color(0,184,0));
+                
+                classTab.setEnabled(true);
+                classTab.setBackground(new Color(0,184,0));
+                
+                allTab.setEnabled(true);
+                allTab.setBackground(new Color(0,184,0));
+                
+                fileName.setText(lastFile.getName()+"/Missing dependencies");
+                mainList.setModel(missingList);
+                
+            
+        });
+        
+    
         
         
     }
@@ -235,7 +310,7 @@ public class MainWindow extends JFrame
         statusBar.add(Status);
         statusBar.add(Completeness);
         
-        fileName.setText(lastFile.getName());
+        fileName.setText(lastFile.getName()+"/Classes");
         fileName.setBounds(0,0,800,28);
         
         Completeness.setBounds(880,0,147,28);
@@ -244,31 +319,60 @@ public class MainWindow extends JFrame
         Status.setBounds(800,0,53,28);
         Status.setText("Status: ");
         
-        this.add(classTab);
-        classTab.setBounds(1065,675,85,26);
+        this.mainPanel.add(classTab,2,0);
+        classTab.setBounds(755,620,85,26);
         classTab.setBackground(new Color(235,60,1));
         classTab.setBorder(BorderFactory.createMatteBorder(2,2,2,2,borderColor));
         classTab.setText("Classes");
         classTab.setFocusPainted(false);
         classTab.setForeground(Color.BLACK);
         
-        this.add(jarTab);
-        jarTab.setBounds(1140,675,85,26);
+        this.mainPanel.add(jarTab,2,0);
+        jarTab.setBounds(835,620,85,26);
         jarTab.setBackground(new Color(0,184,0));
         jarTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
-        jarTab.setText("Jar's");
+        jarTab.setText("Jars");
         jarTab.setFocusPainted(false);
         jarTab.setForeground(Color.BLACK);
        
-        this.add(allTab);
-        allTab.setBounds(1215,675,85,26);
+        this.mainPanel.add(allTab,2,0);
+        allTab.setBounds(915,620,85,26);
         allTab.setBackground(new Color(0,184,0));
         allTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
         allTab.setText("All Files");
         allTab.setFocusPainted(false);
         allTab.setForeground(Color.BLACK);
         
+        this.mainPanel.add(missingTab,2,0);
+        missingTab.setBounds(625,620,135,26);
+        missingTab.setBackground(new Color(0,184,0));
+        missingTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        missingTab.setText("Missing Dependencies");
+        missingTab.setFocusPainted(false);
         
+        missingTab.setForeground(Color.BLACK);
+        
+        this.mainPanel.add(mainList,1,0);
+        mainList.setBackground(backColor);
+        mainList.setFont(mainList.getFont().deriveFont(Font.PLAIN,20));
+        mainList.setForeground(Color.WHITE);
+        mainList.setBounds(0,0,1000,646);
+        
+        Complete.setEnabled(true);
+        Complete.setBackground(new Color(84,19,136));
+        
+        classList.addElement(" -----------------------------------------------------------------Classes------------------------------------------------------------------");
+        classList.addElement(">>NO CLASSES FOUND");
+        
+        jarList.addElement(" -----------------------------------------------------------------Jars-----------------------------------------------------------------------");
+        jarList.addElement(">>NO JARS FOUND");
+        
+        allFileList.addElement(" ----------------------------------------------------------------All Files-------------------------------------------------------------------");
+        allFileList.addElement(">>NO FILES FOUND");
+        
+        missingList.addElement(" --------------------------------------------------------Missing Dependencies---------------------------------------------------------");
+        missingList.addElement(">>ONLY MY WILL TO LIVE IS MISSING :)");
+        mainList.setModel(classList);
         
     }
   

@@ -27,8 +27,8 @@ public class Statics extends JFrame
     private JList refList;
     private LinkedList depends;
     private LinkedList refers;
-    DefaultListModel dep;
-    DefaultListModel ref;
+    private DefaultListModel dep;
+    private DefaultListModel ref;
     public Statics(String title, Image icon, Gestor gestor)
     {
         this.icon= icon;
