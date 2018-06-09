@@ -62,7 +62,8 @@ public class Graph {
         
         this.showGraph();        
     }
-    private void insert(String name){
+    
+    public void insert(String name){
         insert(name,"");
     }
     /**
@@ -73,6 +74,17 @@ public class Graph {
      */
     public void insert(String name , String ref){
         this.add(name , ref );
+    }
+    /**
+     * Metodo que agrega el vertice a la lista de vertices , pero estos nodos ya
+     * tienen la lista de referencias hecha y esto apra luego poder relacionar 
+     * todos los nodos
+     * @param name 
+     */
+    public void addTotalVerex(String name){
+        Vertex v = new Vertex(name);
+        this.lisfOFVertex.add(v);
+        
     }
     /**
      * Imprime los nodos del grafo y sus referencias
@@ -87,6 +99,15 @@ public class Graph {
     public LinkedList getListOFVertex(){
         return this.lisfOFVertex;
     }
+    /**
+     * Retorna el nombre del vertice con el mayor numero de referencias
+     * @return 
+     */
+    public String getMaxofRank(){
+        return this.maxOfR();
+    }
+    
+    ///// Metodos privados //////
     
     
     
@@ -125,6 +146,44 @@ public class Graph {
             } 
             System.out.println("\nTerminado");
         }
+    }
+    
+    /**
+     * Retorna el nombre del vertice con mayor numero de referencias
+     * @return 
+     */
+    private String maxOfR(){
+        if(this.lisfOFVertex.isEmpty()){
+            return "";
+        }else{
+            
+        if(this.lisfOFVertex.getSize() == 1){
+            return this.lisfOFVertex.getHead().getVertex().getID();
+        }else{
+            
+        
+        int max = this.lisfOFVertex.getHead().getVertex().getListofRef().getSize();
+        
+        Node n = this.lisfOFVertex.getHead().getNext();
+        
+        for(int i = 0 ; i < this.lisfOFVertex.getSize()-1; i++){
+            if(max <= n.getVertex().getListofRef().getSize() ){
+                max = n.getVertex().getListofRef().getSize();
+            }
+            n = n.getNext();
+        }
+        n = this.lisfOFVertex.getHead();
+        for(int j = 0 ; j<this.lisfOFVertex.getSize() ; j++){
+                    if(n.getVertex().getListofRef().getSize() == max){
+                        return n.getVertex().getID();
+                    }
+                    n = n.getNext();
+                    
+            
+                }
+            }
+        }
+        return "";
     }
     
     

@@ -13,7 +13,7 @@ package Structures_Logic;
 public class Vertex{
         
     private final String name; //nombre que identifica al nodo
-    private final LinkedList refList; //Lista de referencias a otros nodos
+    private LinkedList refList; //Lista de referencias a otros nodos
         
     public Vertex(String n){
             
@@ -29,10 +29,18 @@ public class Vertex{
     public LinkedList getListofRef(){
             return this.refList;
     }
+    /**
+     * Agrega una lista completa de referencias al vertice
+     * @param l 
+     */
+    public void setListifRef(LinkedList l){
+        this.refList = l;
+    }
+    
      /**
       * Retorna el atributo name del vertice
       * @return atributo name
-      */
+      */    
     public String getID(){
         return this.name;
     }

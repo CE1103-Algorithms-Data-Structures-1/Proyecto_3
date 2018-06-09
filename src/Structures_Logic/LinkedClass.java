@@ -5,6 +5,8 @@
  */
 package Structures_Logic;
 
+import org.apache.bcel.classfile.JavaClass;
+
 /**
  *
  * @author dgarcia
@@ -36,15 +38,16 @@ public class LinkedClass {
      * @param na nombre de la clase a agregar
      * @param c clase a añadir a la lista
      */
-    public void add(String na , Class c){
+    public void add(String na , JavaClass c ,LinkedList l){
+        
         if(this.isEmpty()){
-            this.head = this.tail = new ObjectClass(na,c);
+            this.head = this.tail = new ObjectClass(na,c,l);
         }else{
             ObjectClass temp = this.head;
             while(temp.getNext()!=null){
                 temp = temp.getNext();
             }
-            ObjectClass n = new ObjectClass(na,c);
+            ObjectClass n = new ObjectClass(na,c,l);
             this.tail.setNext(n);
             this.tail = n;
         }

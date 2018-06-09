@@ -52,16 +52,24 @@ public class ReferenceFinder {
 
         for (JavaClass javaClass : javaClasses.values())
         {
+            LinkedList listofRef = new LinkedList();
+            
             System.out.println("Class "+javaClass.getClassName());
+            
             Map<JavaClass, Set<Method>> references = 
                 computeReferences(javaClass, javaClasses);
+            
             for (Entry<JavaClass, Set<Method>> entry : references.entrySet())
             {
                 JavaClass referencedJavaClass = entry.getKey();
                 Set<Method> methods = entry.getValue();
                 System.out.println(
                     "    is referencing class "+
+                      
                     referencedJavaClass.getClassName()+" by calling");
+                    Vertex v = new Vertex(referencedJavaClass.getClassName());
+                    listofRef.add(v);
+                
                 for (Method method : methods)
                 {
                     System.out.println(
@@ -69,6 +77,11 @@ public class ReferenceFinder {
                         Arrays.toString(method.getArgumentTypes()));
                 }
             }
+            
+            
+            //añadiendo clases a la lista de clases
+            this.listOFclass.add(javaClass.getClassName(), javaClass , listofRef); 
+            
         }
     }
 

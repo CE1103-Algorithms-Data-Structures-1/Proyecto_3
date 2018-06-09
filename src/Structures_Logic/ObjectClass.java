@@ -6,6 +6,9 @@
 package Structures_Logic;
 
 import java.util.ArrayList;
+import org.apache.bcel.classfile.Attribute;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
 
 /**
  *
@@ -14,9 +17,10 @@ import java.util.ArrayList;
 public class ObjectClass {
     private final ArrayList methods;
     private final ArrayList atributes;
-    private final Class valClass;
+    private final JavaClass valClass;
     private final String name;
     private ObjectClass next;
+    private LinkedList listofRef;
     
     
     /**
@@ -26,18 +30,34 @@ public class ObjectClass {
      * @param n
      * @param c 
      */
-    public ObjectClass(String n , Class c){
+    public ObjectClass(String n , JavaClass c , LinkedList l){
         this.valClass = c;
         this.name = n;
         this.methods = new ArrayList();
         this.atributes = new ArrayList();
+        this.listofRef = l;
+        Method []mt = c.getMethods();
+        Attribute[] at = c.getAttributes();
+        
+        for(int i = 0 ; i < mt.length ; i++){
+            methods.add(mt[i].getName());
+            
+        }
+        for(int i = 0 ; i < at.length ; i++){
+            atributes.add(at[i].toString());
+            
+        }
+        
+        
+        
+        
     }
     
     /**
      * Retorna el la clase que almacena el nodo
      * @return clase a retornar
      */
-    public Class getValClass(){
+    public JavaClass getValClass(){
         return this.valClass;
     }
     /**
@@ -46,6 +66,13 @@ public class ObjectClass {
      */
     public String getName() {
         return name;
+    }
+    /**
+     * Retorna una lista enlazada con los vertices a los que referencia la clase
+     * @return 
+     */
+    public LinkedList getListOfRef(){
+        return this.listofRef;
     }
     /**
      * Retorna el arrayList con los metodos de la clase 
