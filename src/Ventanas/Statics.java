@@ -27,8 +27,8 @@ public class Statics extends JFrame
     private JList refList;
     private LinkedList depends;
     private LinkedList refers;
-    DefaultListModel dep;
-    DefaultListModel ref;
+    private DefaultListModel dep;
+    private DefaultListModel ref;
     public Statics(String title, Image icon, Gestor gestor)
     {
         this.icon= icon;
@@ -135,9 +135,12 @@ public class Statics extends JFrame
         {
             String linea= input.nextLine();
             String [] array= linea.split("@");
+            if(!linea.equals(""))
+            {
             Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
             depends.add(elemento);
             dep.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getDep());
+            }
         }
         
         File filer= new File("src\\Resources\\Estadisticas\\Referencias.txt");
@@ -146,11 +149,14 @@ public class Statics extends JFrame
         {
             String linea= inputr.nextLine();
             String [] array= linea.split("@");
+            if(!linea.equals(""))
+            {
             Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
             refers.add(elemento);
             ref.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getRef());
+            }
+            
         }
-        refers.addInorderRef(new Rank(15,1,0,"PORONGA.jar"));
         try 
         {
             save();
