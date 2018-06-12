@@ -40,6 +40,18 @@ public class LinkedClass {
         return this.head == null;
     }
     
+    public String getLnameClass(){
+        ObjectClass temp =  this.head;
+        String result = "";
+        
+        while(temp != null){
+            result += temp.getName()+"@";
+            temp = temp.getNext();
+        }
+        
+        return result;
+    }
+    
     /**
      * Añade un nuevo Nodo a la lista con un vertice dentro
      * @param na nombre de la clase a agregar

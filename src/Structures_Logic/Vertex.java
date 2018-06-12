@@ -56,6 +56,7 @@ public class Vertex{
     }
     /**
      * Añade una lista de clases al atributo classList
+     * @param l Lista añadir 
      */
     public void setClassList(LinkedClass l){
         this.classList = l;

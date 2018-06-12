@@ -60,6 +60,7 @@ public class Graph {
                     rf.findReferences(path+name, f);
                     Vertex newVer = new Vertex(array1.getName());
                     Vertex m = lisfOFVertex.findVertex(array[1].getName());
+                    m.setClassList(rf.getLinkedClass());
                     
                 }
                    
