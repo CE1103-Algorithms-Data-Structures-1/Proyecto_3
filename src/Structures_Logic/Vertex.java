@@ -14,6 +14,7 @@ public class Vertex{
         
     private final String name; //nombre que identifica al nodo
     private LinkedList refList; //Lista de referencias a otros nodos
+    private LinkedClass classList; //Lista de clases dentro del jar
         
     public Vertex(String n){
             
@@ -43,6 +44,22 @@ public class Vertex{
       */    
     public String getID(){
         return this.name;
+    }
+    /**
+     * Retorna una lista enlazada con los vertices de clases y estos vertices
+     * poseen una lista de referencias a otras clases , además de los métodos
+     * y atributos de la clase 
+     * @return 
+     */
+    public LinkedClass getClassList(){
+        return this.classList;
+    }
+    /**
+     * Añade una lista de clases al atributo classList
+     */
+    public void setClassList(LinkedClass l){
+        this.classList = l;
+        
     }
         
         

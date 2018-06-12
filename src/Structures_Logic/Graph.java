@@ -35,30 +35,39 @@ public class Graph {
     public void init(String name) throws IOException, ClassFormatException, ClassNotFoundException{
         this.insert(name);
         String path = "C:\\Users\\dgarcia\\Desktop\\";
-        File[] array;
-        JarFile f = new JarFile(path+name);
-        ReferenceFinder rf = new ReferenceFinder();
-        rf.findReferences(path+name, f);
+        
+        File firstJar = new File(path+name);
+        this.insert(firstJar.getName());
+        
+        File[] array = firstJar.listFiles();   
         
         
-       
-//        array = f.listFiles();
+        if(array!=null){
+            
+            if(array[0].getName().toLowerCase().endsWith(".jar")){
+
+                for(int i = 0;i < array.length; i++){
+                    this.insert(array[i].getName(),this.lisfOFVertex.getHead().getVertex().getID());
+                    
+
+                        }            
+            }else if(array[0].getName().toLowerCase().endsWith(".class")){
+                
+                for (File array1 : array) {
+                    
+                    JarFile f = new JarFile(path+name);
+                    ReferenceFinder rf = new ReferenceFinder();
+                    rf.findReferences(path+name, f);
+                    Vertex newVer = new Vertex(array1.getName());
+                    Vertex m = lisfOFVertex.findVertex(array[1].getName());
+                    
+                }
+                   
+            }   
         
-//        if(array!=null){
-//            
-//            if(array[0].getName().toLowerCase().endsWith(".jar")){
-//
-//                for(int i = 0;i < array.length; i++){
-//                    this.insert(array[i].getName(),this.lisfOFVertex.getHead().getVertex().getID());
-//
-//                        }            
-//            }else if(array[0].getName().toLowerCase().endsWith(".java")){
-//            
-//            }   
-//        
-//        }else{
-//            System.out.println("el archivo no posee contenido");
-//        }
+        }else{
+            System.out.println("el archivo no posee contenido");
+        }
         
         this.showGraph();        
     }
@@ -112,7 +121,7 @@ public class Graph {
     
     
     /**
-     * INSERT metodo privado
+     * INSERT 
      * @param name 
      * @param ref 
      */

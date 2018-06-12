@@ -23,6 +23,13 @@ public class LinkedClass {
         this.size = 0;
         this.head = this.tail = null;
     }
+    /**
+     * Retorna el valor del atributo size
+     * @return atributo size
+     */
+    public int getSize(){
+        return this.size;
+    }
     
     
     /**

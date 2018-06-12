@@ -20,7 +20,7 @@ public class ObjectClass {
     private final JavaClass valClass;
     private final String name;
     private ObjectClass next;
-    private LinkedList listofRef;
+    private final LinkedList listofRef;
     
     
     /**
@@ -29,6 +29,7 @@ public class ObjectClass {
      * atributos de la clase
      * @param n
      * @param c 
+     * @param l 
      */
     public ObjectClass(String n , JavaClass c , LinkedList l){
         this.valClass = c;
@@ -39,13 +40,11 @@ public class ObjectClass {
         Method []mt = c.getMethods();
         Attribute[] at = c.getAttributes();
         
-        for(int i = 0 ; i < mt.length ; i++){
-            methods.add(mt[i].getName());
-            
+        for (Method mt1 : mt) {
+            methods.add(mt1.getName());
         }
-        for(int i = 0 ; i < at.length ; i++){
-            atributes.add(at[i].toString());
-            
+        for (Attribute at1 : at) {
+            atributes.add(at1.toString());
         }
         
         
