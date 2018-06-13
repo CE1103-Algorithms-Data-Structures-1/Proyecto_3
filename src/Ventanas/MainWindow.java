@@ -5,10 +5,15 @@
  */
 package Ventanas;
 
+import Structures_Logic.Graph;
+import Structures_Logic.LinkedClass;
 import java.awt.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.bcel.classfile.ClassFormatException;
 
 /**
  * Ventana principal de la aplicacion.
@@ -39,6 +44,7 @@ public class MainWindow extends JFrame
     private DefaultListModel allFileList;
     private DefaultListModel missingList;
     private JList mainList;
+    private Graph grafo;
     
     public MainWindow(String title,Image icono,Gestor gestor)
     {
@@ -143,6 +149,21 @@ public class MainWindow extends JFrame
             if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) 
             {
                 lastFile = fileChooser.getSelectedFile();
+                File []array= lastFile.listFiles();
+                this.grafo= new Graph();
+                try 
+                {
+                    grafo.init(lastFile.toString(),lastFile.getName());
+                } catch (IOException ex) 
+                {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassFormatException ex) 
+                {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) 
+                {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 this.refresh();
                 
                 System.out.println(lastFile.getName());
@@ -361,8 +382,7 @@ public class MainWindow extends JFrame
         Complete.setEnabled(true);
         Complete.setBackground(new Color(84,19,136));
         
-        classList.addElement(" -----------------------------------------------------------------Classes------------------------------------------------------------------");
-        classList.addElement(">>NO CLASSES FOUND");
+        setClasses(grafo.findAllClases());
         
         jarList.addElement(" -----------------------------------------------------------------Jars-----------------------------------------------------------------------");
         jarList.addElement(">>NO JARS FOUND");
@@ -374,6 +394,14 @@ public class MainWindow extends JFrame
         missingList.addElement(">>ONLY MY WILL TO LIVE IS MISSING :)");
         mainList.setModel(classList);
         
+    }
+    public void setClasses(String lista)
+    {
+        String[] clases= lista.split("@");
+        for(int i=0;i<clases.length;i++)
+        {
+            classList.addElement(clases[i]);
+        }
     }
   
 }
