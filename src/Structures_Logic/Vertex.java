@@ -17,7 +17,7 @@ public class Vertex{
     private LinkedClass classList; //Lista de clases dentro del jar
         
     public Vertex(String n){
-            
+        this.classList = new LinkedClass();
         this.refList = new LinkedList(); //se crea la lista de referencias
         this.name = n; // se asigna el id del nodo 
             
