@@ -44,6 +44,7 @@ public class MainWindow extends JFrame
     private DefaultListModel allFileList;
     private DefaultListModel missingList;
     private JList mainList;
+    private JScrollPane scrollPane;
     private Graph grafo;
     
     public MainWindow(String title,Image icono,Gestor gestor)
@@ -68,7 +69,9 @@ public class MainWindow extends JFrame
         allTab= new JButton();
         missingTab= new JButton();
         Completeness= new JLabel();
+        this.scrollPane = new JScrollPane();
         this.mainList= new JList();
+        scrollPane.setViewportView(mainList);
         this.classList= new DefaultListModel();
         this.jarList= new DefaultListModel();
         this.allFileList= new DefaultListModel();
@@ -97,6 +100,8 @@ public class MainWindow extends JFrame
         mainPanel.setBounds(300,53,1000,646);
         mainPanel.setOpaque(true);
         mainPanel.setLayout(null);
+        mainList.setLayoutOrientation(JList.VERTICAL);
+        mainPanel.add(scrollPane,2,0);
         this.add(mainPanel);
         
         JPanel Bar= new JPanel();
@@ -382,7 +387,7 @@ public class MainWindow extends JFrame
         Complete.setEnabled(true);
         Complete.setBackground(new Color(84,19,136));
         
-        setClasses(grafo.findAllClases());
+        setClasses(grafo.getALLclases());
         
         jarList.addElement(" -----------------------------------------------------------------Jars-----------------------------------------------------------------------");
         jarList.addElement(">>NO JARS FOUND");
