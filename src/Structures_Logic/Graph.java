@@ -156,7 +156,15 @@ public class Graph {
         
         return r;
     }
-    
+    public String getAllJars()
+    {
+        String result = "";
+        for(int i = 0 ; i<jars.size();i++){
+            result += jars.get(i)+"@";
+            
+        }
+        return result;
+    }
     public String getALLclases(){
         String result = "";
         for(int i = 0 ; i<clases.size();i++){
