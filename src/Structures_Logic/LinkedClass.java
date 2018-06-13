@@ -30,6 +30,13 @@ public class LinkedClass {
     public int getSize(){
         return this.size;
     }
+    /**
+     * Retorna la cabeza de la lista enlazada
+     * @return atributo head de la lista
+     */
+    public ObjectClass getHead(){
+        return this.head;
+    }
     
     
     /**
@@ -56,6 +63,7 @@ public class LinkedClass {
      * Añade un nuevo Nodo a la lista con un vertice dentro
      * @param na nombre de la clase a agregar
      * @param c clase a añadir a la lista
+     * @param  l lista de vertices
      */
     public void add(String na , JavaClass c ,LinkedList l){
         

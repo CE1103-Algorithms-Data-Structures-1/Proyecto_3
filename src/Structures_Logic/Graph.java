@@ -30,13 +30,13 @@ public class Graph {
     }
     /**
      * Inicializa el grafo utilizando un archivo de extencion jar
-     * @param name id del vertice a agregar
+     * @param p ruta del archivo
+     * @param name id del vertice a agregar 
      */
-    public void init(String name) throws IOException, ClassFormatException, ClassNotFoundException{
+    public void init(String p ,String name) throws IOException, ClassFormatException, ClassNotFoundException{
         this.insert(name);
-        String path = "C:\\Users\\dgarcia\\Desktop\\";
-        
-        File firstJar = new File(path+name);
+        String path = p;
+        File firstJar = new File(path);
         this.insert(firstJar.getName());
         
         File[] array = firstJar.listFiles();   
@@ -48,7 +48,7 @@ public class Graph {
 
                 for(int i = 0;i < array.length; i++){
                     this.insert(array[i].getName(),this.lisfOFVertex.getHead().getVertex().getID());
-                    
+                    this.init(path+"\\"+array[i].getName(),array[i].getName());
 
                         }            
             }else if(array[0].getName().toLowerCase().endsWith(".class")){
@@ -87,7 +87,7 @@ public class Graph {
     }
     /**
      * Metodo que agrega el vertice a la lista de vertices , pero estos nodos ya
-     * tienen la lista de referencias hecha y esto apra luego poder relacionar 
+     * tienen la lista de referencias hecha y esto para luego poder relacionar 
      * todos los nodos
      * @param name 
      */
@@ -117,6 +117,67 @@ public class Graph {
         return this.maxOfR();
     }
     
+    /**
+     * Retorna un string separado por "@" con todos los nombres de los jars que
+     * contiene el primer archivo jar incluyendolo a el
+     * @return r
+     */
+    public String findAllJars(){
+        String r = "";
+        Node temp = this.lisfOFVertex.getHead();
+        while(temp!=null){
+            r+=temp.getVertex().getID()+"@";
+            temp = temp.getNext();
+            
+        }
+        
+        return r;
+    }
+    /**
+     * Retorna un string separado con "@" con todos los nombres de clases dentro
+     * de todos los archivos jar
+     * @return r
+     */
+    public String findAllClases(){
+        String r = "";
+        Node temp = this.lisfOFVertex.getHead();
+        while(temp != null ){
+            
+            if(!temp.getVertex().getClassList().isEmpty()){
+                ObjectClass obj = temp.getVertex().getClassList().getHead();
+                while(obj != null){
+                    r+=obj.getName()+"@";
+                    obj = obj.getNext();
+                }
+                temp = temp.getNext();
+            }
+        }
+        
+        return r;
+    }
+    /**
+     * Retorna un string separado con "@" con todos los nombres de los jars junto
+     * con todos los nombre de las clases dentro de ellos
+     * @return r
+     */
+    public String findAllFiles(){
+        String r = "";
+        Node temp = this.lisfOFVertex.getHead();
+        while(temp != null ){
+            r += temp.getVertex().getID()+"@";
+            if(!temp.getVertex().getClassList().isEmpty()){
+                ObjectClass obj = temp.getVertex().getClassList().getHead();
+                while(obj != null){
+                    r+=obj.getName()+"@";
+                    obj = obj.getNext();
+                }
+                temp = temp.getNext();
+            }
+        }        
+        return r;
+    }
+    
+    
     ///// Metodos privados //////
     
     
@@ -136,6 +197,7 @@ public class Graph {
         }
         this.size++;
     }
+    
     /**
      * Imprimir el grafo
      */
