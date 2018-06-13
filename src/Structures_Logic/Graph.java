@@ -5,9 +5,15 @@
  */
 package Structures_Logic;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.jar.JarFile;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import org.apache.bcel.classfile.ClassFormatException;
 
 /**
@@ -19,7 +25,8 @@ public class Graph {
     
     private int size; //numero de vertices en el grafo
     private final LinkedList lisfOFVertex; //lista de vertices en el grafo
-
+    private final List jars;
+    private final List clases;
     /**
      * Constructor de la clase Graph
      */
@@ -27,11 +34,15 @@ public class Graph {
         
         this.lisfOFVertex = new LinkedList(); // se inicia la lista de vertices
         this.size = 0; // se inicia el numero de vertices en 0
+        jars = new ArrayList<>();
+        clases =  new ArrayList<>();
     }
     /**
      * Inicializa el grafo utilizando un archivo de extencion jar
      * @param p ruta del archivo
      * @param name id del vertice a agregar 
+     * @throws java.io.IOException 
+     * @throws java.lang.ClassNotFoundException 
      */
     public void init(String p ,String name) throws IOException, ClassFormatException, ClassNotFoundException{
         this.insert(name);
@@ -39,36 +50,48 @@ public class Graph {
         File firstJar = new File(path);
         this.insert(firstJar.getName());
         
-        File[] array = firstJar.listFiles();   
+        ZipFile zipFile = new ZipFile(path);
+        ZipInputStream stream = new ZipInputStream(new BufferedInputStream(new FileInputStream(path)));
+        ZipEntry entry = null;
         
         
-        if(array!=null){
+        String lastname = "" , fnam = "";
+        
+        while((entry = stream.getNextEntry())!=null){
+            lastname = fnam;
+            fnam = entry.getName();
             
-            if(array[0].getName().toLowerCase().endsWith(".jar")){
-
-                for(int i = 0;i < array.length; i++){
-                    this.insert(array[i].getName(),this.lisfOFVertex.getHead().getVertex().getID());
-                    this.init(path+"\\"+array[i].getName(),array[i].getName());
-
-                        }            
-            }else if(array[0].getName().toLowerCase().endsWith(".class")){
+            if(entry.getName().endsWith(".jar")){
                 
-                for (File array1 : array) {
+//                this.insert(entry.getName(), this.lisfOFVertex.getHead().getVertex().getID());
+//                this.init(path+"\\" + entry.getName(), entry.getName());
+                
+                jars.add(entry.getName());
+                
+            }else if(entry.getName().endsWith(".class")){
+                
+
+                
+//                    JarFile f = new JarFile(path+entry.getName());
+//                    ReferenceFinder rf = new ReferenceFinder();
+//                    rf.findReferences(entry.getName(), f);               
+//                    
+//                    Vertex m = lisfOFVertex.findVertex(lastname);
+//                    m.setClassList(rf.getLinkedClass());
                     
-                    JarFile f = new JarFile(path+name);
-                    ReferenceFinder rf = new ReferenceFinder();
-                    rf.findReferences(path+name, f);
-                    Vertex newVer = new Vertex(array1.getName());
-                    Vertex m = lisfOFVertex.findVertex(array[1].getName());
-                    m.setClassList(rf.getLinkedClass());
-                    
-                }
-                   
-            }   
-        
-        }else{
-            System.out.println("el archivo no posee contenido");
+                    clases.add(entry.getName());
+            }
+            
+//            InputStream input = zipFile.getInputStream(entry);
+            
+            
+            
+            
         }
+               
+        System.out.println("");
+        
+
         
         this.showGraph();        
     }
@@ -133,6 +156,15 @@ public class Graph {
         
         return r;
     }
+    
+    public String getALLclases(){
+        String result = "";
+        for(int i = 0 ; i<clases.size();i++){
+            result += clases.get(i)+"@";
+            
+        }
+        return result;
+    }
     /**
      * Retorna un string separado con "@" con todos los nombres de clases dentro
      * de todos los archivos jar
@@ -141,9 +173,11 @@ public class Graph {
     public String findAllClases(){
         String r = "";
         Node temp = this.lisfOFVertex.getHead();
+        
         while(temp != null ){
             
             if(!temp.getVertex().getClassList().isEmpty()){
+                
                 ObjectClass obj = temp.getVertex().getClassList().getHead();
                 while(obj != null){
                     r+=obj.getName()+"@";
