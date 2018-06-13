@@ -5,10 +5,15 @@
  */
 package Ventanas;
 
+import Structures_Logic.Graph;
+import Structures_Logic.LinkedClass;
 import java.awt.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.bcel.classfile.ClassFormatException;
 
 /**
  * Ventana principal de la aplicacion.
@@ -39,6 +44,8 @@ public class MainWindow extends JFrame
     private DefaultListModel allFileList;
     private DefaultListModel missingList;
     private JList mainList;
+    private JScrollPane scrollPane;
+    private Graph grafo;
     
     public MainWindow(String title,Image icono,Gestor gestor)
     {
@@ -63,6 +70,8 @@ public class MainWindow extends JFrame
         missingTab= new JButton();
         Completeness= new JLabel();
         this.mainList= new JList();
+        this.scrollPane = new JScrollPane(mainList);
+        this.mainList.setBackground(backColor);
         this.classList= new DefaultListModel();
         this.jarList= new DefaultListModel();
         this.allFileList= new DefaultListModel();
@@ -91,7 +100,13 @@ public class MainWindow extends JFrame
         mainPanel.setBounds(300,53,1000,646);
         mainPanel.setOpaque(true);
         mainPanel.setLayout(null);
+        mainList.setLayoutOrientation(JList.VERTICAL);
+        this.scrollPane.setBounds(0,0,1000,646);
+        this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.scrollPane.setBorder(null);
+        mainPanel.add(scrollPane,1,0);
         this.add(mainPanel);
+        
         
         JPanel Bar= new JPanel();
         Bar.setSize(new Dimension(1300,25));
@@ -143,6 +158,21 @@ public class MainWindow extends JFrame
             if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) 
             {
                 lastFile = fileChooser.getSelectedFile();
+                File []array= lastFile.listFiles();
+                this.grafo= new Graph();
+                try 
+                {
+                    grafo.init(lastFile.toString(),lastFile.getName());
+                } catch (IOException ex) 
+                {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassFormatException ex) 
+                {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) 
+                {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 this.refresh();
                 
                 System.out.println(lastFile.getName());
@@ -166,12 +196,13 @@ public class MainWindow extends JFrame
         Panel1.add(Stats);
         
         JButton Generate= new JButton("Generate!");
-        Generate.setBackground(new Color(0,184,0));
+        Generate.setBackground(Color.DARK_GRAY);
         Generate.setFont(Generate.getFont().deriveFont(Font.BOLD,28));
         Generate.setForeground(Color.BLACK);
         Generate.setBounds(0,360,300,65);
         Generate.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
         Generate.setFocusPainted(false);
+        Generate.setEnabled(false);
         Generate.addActionListener(e->{
                 Generate.setBackground(new Color(235,60,1));
                 Generate.setForeground(Color.BLACK);
@@ -306,6 +337,7 @@ public class MainWindow extends JFrame
      */
     public void refresh()
     {
+        clean();
         statusBar.setLayout(null);
         statusBar.add(Status);
         statusBar.add(Completeness);
@@ -352,28 +384,73 @@ public class MainWindow extends JFrame
         
         missingTab.setForeground(Color.BLACK);
         
-        this.mainPanel.add(mainList,1,0);
         mainList.setBackground(backColor);
         mainList.setFont(mainList.getFont().deriveFont(Font.PLAIN,20));
         mainList.setForeground(Color.WHITE);
         mainList.setBounds(0,0,1000,646);
         
-        Complete.setEnabled(true);
-        Complete.setBackground(new Color(84,19,136));
+        //Complete.setBackground(new Color(84,19,136));
         
-        classList.addElement(" -----------------------------------------------------------------Classes------------------------------------------------------------------");
-        classList.addElement(">>NO CLASSES FOUND");
+        classList.addElement(" -----------------------------------------------------------------Classes----------------------------------------------------------------");
+        setList(grafo.getALLclases(),classList,"classes");
         
-        jarList.addElement(" -----------------------------------------------------------------Jars-----------------------------------------------------------------------");
-        jarList.addElement(">>NO JARS FOUND");
+        jarList.addElement(" -----------------------------------------------------------------Jars--------------------------------------------------------------------");
+        setList(grafo.getAllJars(),jarList,"jar");
         
-        allFileList.addElement(" ----------------------------------------------------------------All Files-------------------------------------------------------------------");
-        allFileList.addElement(">>NO FILES FOUND");
+        allFileList.addElement(" ----------------------------------------------------------------All Files-----------------------------------------------------------------");
+        allFileList.addElement(" >>>CLASSES");
+        setList(grafo.getALLclases(),allFileList,"all");
+        allFileList.addElement(" >>>JARS");
+        setList(grafo.getAllJars(),allFileList,"all");
+
         
-        missingList.addElement(" --------------------------------------------------------Missing Dependencies---------------------------------------------------------");
-        missingList.addElement(">>ONLY MY WILL TO LIVE IS MISSING :)");
+        missingList.addElement(" --------------------------------------------------------Missing Dependencies-------------------------------------------------------");
+        setList("",missingList,"miss");
+        
         mainList.setModel(classList);
         
+    }
+    /**
+     * Metodo para inicializar las listas 
+     * @param lista Lista de elementos
+     * @param model Lista recorrible
+     */
+    public void setList(String lista,DefaultListModel model,String id)
+    {
+        if(lista!="")
+        {
+            String[] clases= lista.split("@");
+            for(int i=0;i<clases.length;i++)
+            {
+                model.addElement(clases[i]);
+            }
+        }
+        else
+        {
+            if(id.equals("jar"))
+            {
+                model.addElement(">>NO JARS FOUND");
+            }
+            else if(id.equals("classes"))
+            {
+                 model.addElement(">>NO CLASSES FOUND");
+            }
+            else if(id.equals("all"))
+            {
+                 model.addElement(">>NO FILES FOUND");
+            }
+            else if(id.equals("miss"))
+            {
+                model.addElement(">>ONLY MY WILL TO LIVE IS MISSING :)");
+            }
+        }
+    }
+    public void clean()
+    {
+        classList.clear();
+        jarList.clear();
+        missingList.clear();
+        allFileList.clear();
     }
   
 }
