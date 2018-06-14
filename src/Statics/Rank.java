@@ -26,6 +26,7 @@ public class Rank
     }
     /**
      * Metodo que retorna el numero de referncias.
+     *
      * @return Entero referencias.
      */
     public int getRef()
@@ -34,6 +35,7 @@ public class Rank
     }
     /**
      * Metodo que retorna el numero de dependencias.
+     *
      * @return Entero dependencias.
      */
     public int getDep()
@@ -42,6 +44,7 @@ public class Rank
     }
     /**
      * Metodo que cambia la cantidad de referencias de un archivo.
+     *
      * @param ref Nuevo numero de referencias 
      */
     public void chnRef(int ref)
@@ -50,6 +53,7 @@ public class Rank
     }
     /**
      * Metodo que cambia la cantidad de dependencias de un archivo.
+     *
      * @param dep Nuevo numero de dependencias.
      */
     public void chnDep(int dep)
@@ -58,6 +62,7 @@ public class Rank
     }
     /**
      * Metodo que retorna la posicion en el ranking del archivo.
+     *
      * @return Entero posicion.
      */
     public int getRank()
@@ -66,6 +71,7 @@ public class Rank
     }
     /**
      * Metodo que modifica la posicion en el ranking del archivo.
+     *
      * @param pos 
      */
     public void chnRank(int pos)
@@ -74,6 +80,7 @@ public class Rank
     }
     /**
      * Metodo para obtener el nombre del elemento en el ranking.
+     *
      * @return String nombre.
      */
     public String getName()
