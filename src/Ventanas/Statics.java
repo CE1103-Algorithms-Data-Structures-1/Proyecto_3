@@ -59,7 +59,7 @@ public class Statics extends JFrame
         JLabel title= new JLabel("    JAR Analyzer Statistics");
         title.setFont(title.getFont().deriveFont(Font.BOLD,30));
         title.setBounds(294,30,410,50);
-        title.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
+        //title.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
         title.setForeground(new Color(0,184,0));
         this.add(title,BorderLayout.NORTH);
         
@@ -78,7 +78,7 @@ public class Statics extends JFrame
         
         JPanel mostDep= new JPanel();
         mostDep.setBounds(50,100,420,560);
-        mostDep.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
+        //mostDep.setBorder(BorderFactory.createMatteBorder(4,4,4,4,new Color(57,61,63)));
         mostDep.setBackground(Color.DARK_GRAY);
         mostDep.setLayout(null);
         this.add(mostDep);
@@ -89,12 +89,12 @@ public class Statics extends JFrame
         mostDepL.setForeground(new Color(31,31,31));
         mostDepL.setOpaque(true);
         mostDepL.setBounds(0,0,420,60);
-        mostDepL.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
+        //mostDepL.setBorder(BorderFactory.createMatteBorder(4,4,4,4,new Color(57,61,63)));
         mostDep.add(mostDepL,BorderLayout.LINE_START);
         
         JPanel mostRef= new JPanel();
         mostRef.setBounds(528,100,420,560);
-        mostRef.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
+        //mostRef.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
         mostRef.setBackground(Color.DARK_GRAY);
         mostRef.setLayout(null);
         this.add(mostRef);
@@ -105,7 +105,7 @@ public class Statics extends JFrame
         mostRefL.setForeground(new Color(31,31,31));
         mostRefL.setOpaque(true);
         mostRefL.setBounds(0,0,420,60);
-        mostRefL.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
+        //mostRefL.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
         mostRef.add(mostRefL,BorderLayout.LINE_START);
         
         
