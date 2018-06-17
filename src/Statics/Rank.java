@@ -60,7 +60,7 @@ public class Rank
      * Metodo que retorna la posicion en el ranking del archivo.
      * @return Entero posicion.
      */
-    public int getRank()
+    public int getValue()
     {
         return this.posicion;
     }

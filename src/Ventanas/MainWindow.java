@@ -5,6 +5,8 @@
  */
 package Ventanas;
 
+import Grafico.Clase;
+import Structures_Interface.ClassList;
 import Structures_Logic.Graph;
 import Structures_Logic.LinkedClass;
 import java.awt.*;
@@ -202,12 +204,38 @@ public class MainWindow extends JFrame
         Generate.setBounds(0,360,300,65);
         Generate.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
         Generate.setFocusPainted(false);
-        Generate.setEnabled(false);
+        Generate.setEnabled(true);
         Generate.addActionListener(e->{
                 Generate.setBackground(new Color(235,60,1));
                 Generate.setForeground(Color.BLACK);
                 Generate.setText("Generating...");
-                //Generate.setBorder(null);
+                
+                ClassList a=new ClassList();
+                
+                a.Add(new Clase(null,null,"Prueba 3",10,600,10,10));
+                a.Add(new Clase(null,null,"Prueba 3",10,600,10,10));
+                
+                ClassList b=new ClassList();
+                
+                b.Add(new Clase(null,null,"Prueba 3",100,150,300,30));
+                b.Add(new Clase(null,null,"Prueba 3",500,550,300,230));
+                
+                ClassList c=new ClassList();
+                
+                c.Add(new Clase(null,null,"Prueba 3",400,250,10,10));
+                c.Add(new Clase(null,null,"Prueba 3",100,150,10,10));
+                
+                ClassList d=new ClassList();
+                
+                d.Add(new Clase(null,null,"Prueba 3",400,250,300,230));
+                d.Add(new Clase(null,null,"Prueba 3",500,550,300,230));
+                
+                ClassList lista= new ClassList();
+                
+                lista.Add(new Clase(a,b,"Prueba 1",400,200,10,10));
+                lista.Add(new Clase(c,d,"Prueba 2",100,100,10,10));
+                lista.Add(new Clase(d,c,"Prueba 2",500,500,10,10));
+                gestor.Generate(lista);
                 Generate.setEnabled(false);
             
         });

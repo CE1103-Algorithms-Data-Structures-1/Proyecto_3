@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Structures_Interface.ClassList;
 import java.awt.Image;
 import java.awt.Toolkit;
 
@@ -47,5 +48,10 @@ public class Gestor
     public void showDisplay()
     {
         this.display.setVisible(true);
+    }
+    public void Generate(ClassList lista)
+    {
+        this.showDisplay();
+        this.display.Generate(lista);
     }
 }
