@@ -17,10 +17,11 @@ import java.util.zip.ZipInputStream;
 import org.apache.bcel.classfile.ClassFormatException;
 
 /**
- * Clase Graph es la clase en donde se agreganlos vertices para 
- * la creacion en si del grafo
+ * Clase Graph es la clase en donde se agregan los vertices para
+ * la creacion del grafo
  * @author dgarcia
  */
+
 public class Graph {
     
     private int size; //numero de vertices en el grafo
@@ -39,17 +40,16 @@ public class Graph {
     }
     /**
      * Inicializa el grafo utilizando un archivo de extencion jar
-     * @param p ruta del archivo
-     * @param name id del vertice a agregar 
+     *
+     * @param path, ruta del archivo
+     * @param name, id del vertice a agregar
      * @throws java.io.IOException 
      * @throws java.lang.ClassNotFoundException 
      */
-    public void init(String p ,String name) throws IOException, ClassFormatException, ClassNotFoundException{
+    public void init(String path ,String name) throws IOException, ClassFormatException, ClassNotFoundException{
         this.insert(name);
-        String path = p;
         File firstJar = new File(path);
         this.insert(firstJar.getName());
-        
         ZipFile zipFile = new ZipFile(path);
         ZipInputStream stream = new ZipInputStream(new BufferedInputStream(new FileInputStream(path)));
         ZipEntry entry = null;
@@ -71,7 +71,7 @@ public class Graph {
             }else if(entry.getName().endsWith(".class")){
                 
 
-                
+                //todo
 //                    JarFile f = new JarFile(path+entry.getName());
 //                    ReferenceFinder rf = new ReferenceFinder();
 //                    rf.findReferences(entry.getName(), f);               
@@ -83,16 +83,9 @@ public class Graph {
             }
             
 //            InputStream input = zipFile.getInputStream(entry);
-            
-            
-            
-            
-        }
-               
-        System.out.println("");
-        
 
-        
+        }
+        System.out.println("");
         this.showGraph();        
     }
     
@@ -105,6 +98,7 @@ public class Graph {
      * @param name nombre del nuevo nodo
      * @param ref  nombre del nodo a referenciar
      */
+
     public void insert(String name , String ref){
         this.add(name , ref );
     }
@@ -114,6 +108,7 @@ public class Graph {
      * todos los nodos
      * @param name 
      */
+
     public void addTotalVerex(String name){
         Vertex v = new Vertex(name);
         this.lisfOFVertex.add(v);
