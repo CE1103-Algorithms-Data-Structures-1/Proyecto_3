@@ -5,21 +5,19 @@
  */
 package Structures_Interface;
 
+import Grafico.Clase;
 import Statics.Rank;
 
 /**
- *Clase que instancia objetos nodo;
- * @author Daniel Camacho 
+ *
+ * @author Daniel Camacho
  */
-public class Node 
+public class ClassNode 
 {
-    private Rank value;
-    private Node next;
-    /**
-     * Contructor de la clase Node.
-     * @param val Objeto estadistica..
-     */
-    public Node(Rank val)
+    private ClassNode next;
+    private Clase value;
+    
+    public ClassNode(Clase val)
     {
         this.value=val;
         this.next=null;
@@ -28,7 +26,7 @@ public class Node
      * Metodo para obtener el siguiente nodo.
      * @return Nodo siguiente.
      */
-    public Node getNext()
+    public ClassNode getNext()
     {
         return this.next;
     }
@@ -36,15 +34,15 @@ public class Node
      * Metodo para establecer el valor del siguiente nodo.
      * @param nex Nodo siguiente.
      */
-    public void setNext(Node nex)
+    public void setNext(ClassNode nex)
     {
         this.next=nex;
     }
     /**
      * Metodo para obtener el valor almacenado en el nodo.
-     * @return Rank valor.
+     * @return Clase valor.
      */
-    public Rank getValue()
+    public Clase getValue()
     {
         return this.value;
     }

@@ -7,15 +7,15 @@ import Statics.Rank;
  *Clase encargada de instanciar listas enlazadas.
  * @author Daniel Camacho 
  */
-public class LinkedList 
+public class RankList 
 {
-    private Node head;
+    private RankNode head;
     private int len;
     
     /**
      * Constructor de la clase LinkedList
      */
-    public LinkedList()
+    public RankList()
     {
         this.head=null;
         this.len=0;
@@ -28,17 +28,17 @@ public class LinkedList
     {
       if(isEmpty())
       {
-          this.head=new Node(rnk);
+          this.head=new RankNode(rnk);
           this.len++;
       } 
       else
       {
-       Node temp= this.head;
+       RankNode temp= this.head;
        while(temp.getNext()!=null)
        {
            temp=temp.getNext();
        }
-       temp.setNext(new Node(rnk));
+       temp.setNext(new RankNode(rnk));
        this.len++;
       }
     }
@@ -59,11 +59,11 @@ public class LinkedList
      */
     public void printAll()
     {
-        Node temp= this.head;
+        RankNode temp= this.head;
         while(temp!=null)
         {
             System.out.println(temp.getValue().getName());
-            System.out.println("Posicion: "+temp.getValue().getRank());
+            System.out.println("Posicion: "+temp.getValue().getValue());
             temp=temp.getNext();
         }
         System.out.println(this.len);
@@ -86,13 +86,13 @@ public class LinkedList
         int ind=0;
         if(pos<len)
         {
-            Node temp=this.head;
+            RankNode temp=this.head;
             while(pos!=ind)
             {
                 temp=temp.getNext();
                 ind++;
             }
-            return temp.getValue().getDep()+"@"+temp.getValue().getRef()+"@"+temp.getValue().getRank()+"@"+temp.getValue().getName();
+            return temp.getValue().getDep()+"@"+temp.getValue().getRef()+"@"+temp.getValue().getValue()+"@"+temp.getValue().getName();
         }
         return null;
     }
@@ -110,7 +110,7 @@ public class LinkedList
      */
     public void addInorderDep(Rank rnk)
     {
-        Node temp= this.head;
+        RankNode temp= this.head;
         Boolean found= false;
         while(temp.getNext()!=null)
         {
@@ -120,7 +120,7 @@ public class LinkedList
                 {
                     if(this.head==temp)
                     {
-                        Node nuevo= new Node(rnk);
+                        RankNode nuevo= new RankNode(rnk);
                         this.head=nuevo;
                         nuevo.setNext(temp);
                         nuevo.getValue().chnRank(1);
@@ -130,10 +130,10 @@ public class LinkedList
                 }
                 else if(temp.getNext().getValue().getDep()<rnk.getDep())
                 {
-                    Node nuevo= new Node(rnk);
+                    RankNode nuevo= new RankNode(rnk);
                     nuevo.setNext(temp.getNext());
                     temp.setNext(nuevo);
-                    nuevo.getValue().chnRank(temp.getValue().getRank()+1);
+                    nuevo.getValue().chnRank(temp.getValue().getValue()+1);
                     temp=temp.getNext().getNext();
                     found=true;
                     len++;
@@ -147,21 +147,21 @@ public class LinkedList
             {
                 if(temp.getNext().getNext()==null)
                 {
-                    temp.getValue().chnRank(temp.getValue().getRank()+1);
-                    temp.getNext().getValue().chnRank(temp.getValue().getRank()+1);
+                    temp.getValue().chnRank(temp.getValue().getValue()+1);
+                    temp.getNext().getValue().chnRank(temp.getValue().getValue()+1);
                     temp=temp.getNext();
                 }
                 else
                 {
-                    temp.getValue().chnRank(temp.getValue().getRank()+1);
+                    temp.getValue().chnRank(temp.getValue().getValue()+1);
                     temp=temp.getNext();
                 }
             }
         }
         if(!found)
         {
-            rnk.chnRank(temp.getValue().getRank()+1);
-            temp.setNext(new Node(rnk));
+            rnk.chnRank(temp.getValue().getValue()+1);
+            temp.setNext(new RankNode(rnk));
             len++;
             
         }
@@ -172,7 +172,7 @@ public class LinkedList
      */
     public void addInorderRef(Rank rnk)
     {
-        Node temp= this.head;
+        RankNode temp= this.head;
         Boolean found= false;
         while(temp.getNext()!=null)
         {
@@ -182,7 +182,7 @@ public class LinkedList
                 {
                     if(this.head==temp)
                     {
-                        Node nuevo= new Node(rnk);
+                        RankNode nuevo= new RankNode(rnk);
                         this.head=nuevo;
                         nuevo.setNext(temp);
                         nuevo.getValue().chnRank(1);
@@ -192,10 +192,10 @@ public class LinkedList
                 }
                 else if(temp.getNext().getValue().getRef()<rnk.getRef())
                 {
-                    Node nuevo= new Node(rnk);
+                    RankNode nuevo= new RankNode(rnk);
                     nuevo.setNext(temp.getNext());
                     temp.setNext(nuevo);
-                    nuevo.getValue().chnRank(temp.getValue().getRank()+1);
+                    nuevo.getValue().chnRank(temp.getValue().getValue()+1);
                     temp=temp.getNext().getNext();
                     found=true;
                     len++;
@@ -209,21 +209,21 @@ public class LinkedList
             {
                 if(temp.getNext().getNext()==null)
                 {
-                    temp.getValue().chnRank(temp.getValue().getRank()+1);
-                    temp.getNext().getValue().chnRank(temp.getValue().getRank()+1);
+                    temp.getValue().chnRank(temp.getValue().getValue()+1);
+                    temp.getNext().getValue().chnRank(temp.getValue().getValue()+1);
                     temp=temp.getNext();
                 }
                 else
                 {
-                    temp.getValue().chnRank(temp.getValue().getRank()+1);
+                    temp.getValue().chnRank(temp.getValue().getValue()+1);
                     temp=temp.getNext();
                 }
             }
         }
         if(!found)
         {
-            rnk.chnRank(temp.getValue().getRank()+1);
-            temp.setNext(new Node(rnk));
+            rnk.chnRank(temp.getValue().getValue()+1);
+            temp.setNext(new RankNode(rnk));
             len++;
             
         }
