@@ -6,7 +6,7 @@
 package Ventanas;
 
 import Statics.Rank;
-import Structures_Interface.LinkedList;
+import Structures_Interface.RankList;
 import java.awt.*;
 import java.io.*;
 import java.util.Scanner;
@@ -25,8 +25,8 @@ public class Statics extends JFrame
     private Gestor gestor;
     private JList depList;
     private JList refList;
-    private LinkedList depends;
-    private LinkedList refers;
+    private RankList depends;
+    private RankList refers;
     private DefaultListModel dep;
     private DefaultListModel ref;
     public Statics(String title, Image icon, Gestor gestor)
@@ -38,8 +38,8 @@ public class Statics extends JFrame
         this.ref= new DefaultListModel();
         this.depList= new JList(dep);
         this.refList= new JList(ref);
-        this.depends= new LinkedList();
-        this.refers= new LinkedList();
+        this.depends= new RankList();
+        this.refers= new RankList();
         this.Init();
     }
     /**
@@ -139,7 +139,7 @@ public class Statics extends JFrame
             {
             Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
             depends.add(elemento);
-            dep.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getDep());
+            dep.addElement(elemento.getValue()+". "+elemento.getName()+": "+ elemento.getDep());
             }
         }
         
@@ -153,7 +153,7 @@ public class Statics extends JFrame
             {
             Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
             refers.add(elemento);
-            ref.addElement(elemento.getRank()+". "+elemento.getName()+": "+ elemento.getRef());
+            ref.addElement(elemento.getValue()+". "+elemento.getName()+": "+ elemento.getRef());
             }
             
         }

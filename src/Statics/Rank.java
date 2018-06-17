@@ -65,7 +65,7 @@ public class Rank
      *
      * @return Entero posicion.
      */
-    public int getRank()
+    public int getValue()
     {
         return this.posicion;
     }
