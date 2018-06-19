@@ -39,7 +39,6 @@ public class Graph {
     private ZipFile zipFile; // archivo del que sse sacan los jars y clases
     private File resourcesDirectory;
     private JarFile f;
-
     /**
      * Constructor de la clase Graph
      */
@@ -363,9 +362,7 @@ public class Graph {
     }
     
     public Graph createNewGraph(String n) 
-            throws IOException,ClassFormatException, ClassNotFoundException{
-        
-        
+            throws IOException,ClassFormatException, ClassNotFoundException
         //String newPath = this.f.getClass().getResource(n).toExternalForm();
        
         ZipEntry z= new ZipEntry(n);
@@ -407,15 +404,62 @@ public class Graph {
         
         return listDep;
     }
-    
-    private Long[][] makeAdjacencyMatrix(){
-        Long[][] adjMat = new Long[this.graphListOfClass.getSize()][this.graphListOfClass.getSize()]; 
-        return adjMat;
+    /**
+     * Retorna una matriz de adyacencia con 1 si hay conexion y 0 si no la hay ,
+     * esto para luego calcular si el grafo es conexo o no
+     * @return 
+     */
+    public int[][] makeAdjacencyMatrix(){
+        
+        LinkedClass tempList = this.graphListOfClass;
+        int[][] adjMat = new int[this.graphListOfClass.getSize()][this.graphListOfClass.getSize()]; 
+        for(int i = 0 ; i < tempList.getSize() ; i++){
+            for(int j = 0 ; j < tempList.getSize() ; j++){
+                
+            
+                if(tempList.indexOf(i).getListOfRef().findVertex(tempList.indexOf(j).getName()).getID().equals(tempList.indexOf(j).getName()) ){
+                    
+                    adjMat[i][j] = 1;
+                    
+                }else{
+                    adjMat[i][j] = 0;
+                      
+                }
+
+        }
+        
+        
     }
     public File getLastFile()
     {
         return this.resourcesDirectory;
     }
 
+    return adjMat;
     
+    }
+    
+    public boolean conexo() {
+        int[][] rsult = this.makeAdjacencyMatrix();
+        int x = 0;
+        if (rsult.length > 0) {
+            for (int i = 0; i < rsult.length - 1; i++) {
+                for (int j = 0; j < rsult.length - 1; j++) {
+                    if (i != j) {
+                        if ((Integer) rsult[i][j] == 0 && (Integer)
+                            rsult[j][i] == 0) {
+                            x += 1;
+                        }
+                    } 
+                }
+                        if (x == rsult.length - 1) {
+                             return false;
+                        }
+            
+                x = 0;
+            }
+            return true;
+        }
+        return false;
+    }    
 }
