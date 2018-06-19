@@ -32,7 +32,9 @@ public class Statics extends JFrame
     private RankList refers;
     private DefaultListModel dep;
     private DefaultListModel ref;
-    public Statics(String title, Image icon, Gestor gestor)
+    private Boolean relatedcond;
+    private JLabel cond;
+    public Statics(String title, Image icon, Gestor gestor,Boolean relatedcond)
     {
         this.icon= icon;
         this.title= title;
@@ -45,6 +47,8 @@ public class Statics extends JFrame
         this.refscr= new JScrollPane(refList);
         this.depends= new RankList();
         this.refers= new RankList();
+        this.relatedcond= relatedcond;
+        this.cond= new JLabel();
         this.Init();
     }
     /**
@@ -88,7 +92,7 @@ public class Statics extends JFrame
         mostDep.setLayout(null);
         this.add(mostDep);
         
-        JLabel mostDepL= new JLabel(" Analyzed JARS with the Most Dependencies:");
+        JLabel mostDepL= new JLabel(" Classes with the Most Dependencies:");
         mostDepL.setBackground(new Color(0,184,0));
         mostDepL.setFont(mostDepL.getFont().deriveFont(Font.BOLD,18));
         mostDepL.setForeground(new Color(31,31,31));
@@ -104,7 +108,7 @@ public class Statics extends JFrame
         mostRef.setLayout(null);
         this.add(mostRef);
         
-        JLabel mostRefL= new JLabel(" Analyzed JARS with the Most References:");
+        JLabel mostRefL= new JLabel(" Classes with the Most References:");
         mostRefL.setBackground(new Color(0,184,0));
         mostRefL.setFont(mostRefL.getFont().deriveFont(Font.BOLD,18));
         mostRefL.setForeground(new Color(31,31,31));
@@ -112,6 +116,14 @@ public class Statics extends JFrame
         mostRefL.setBounds(0,0,420,60);
         //mostRefL.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
         mostRef.add(mostRefL,BorderLayout.LINE_START);
+        
+        JLabel related= new JLabel();
+        related.setFont(mostRefL.getFont().deriveFont(Font.BOLD,18));
+        related.setForeground(new Color(0,184,0));
+        related.setText("Is Related?-->" );//+relatedcond);
+        related.setBounds(10,670,500,30);
+        this.add(related);
+        
         
         
         depList.setBackground(Color.DARK_GRAY);
@@ -138,7 +150,7 @@ public class Statics extends JFrame
      * Metodo para generar las listas de ranking.
      * @throws FileNotFoundException 
      */
-    public void generate(ClassList lista) 
+    public void generate(ClassList lista,Boolean r) 
    {
        RankList rankd=lista.ConvertToRankList();
        rankd=rankd.orderDep();
@@ -152,6 +164,8 @@ public class Statics extends JFrame
        ref=rankr.toList("r");
        depList.setModel(dep);
        refList.setModel(ref);
+       this.relatedcond=r;
+       this.chnCond();
        
         
         
@@ -167,5 +181,19 @@ public class Statics extends JFrame
         refers.clear();
     }
     
+    public void chnCond()
+    {
+        cond= new JLabel();
+        cond.setFont(cond.getFont().deriveFont(Font.BOLD,18));
+        cond.setForeground(new Color(0,184,0));
+        cond.setText(relatedcond.toString() );
+        if(!relatedcond)
+        {
+            cond.setForeground(Color.RED);
+        }
+        cond.setBounds(140,670,500,30);
+        this.add(cond);
+        cond.repaint();
+    }
     
 }

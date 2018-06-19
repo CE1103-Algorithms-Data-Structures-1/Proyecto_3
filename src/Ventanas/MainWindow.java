@@ -10,6 +10,8 @@ import Structures_Interface.ClassList;
 import Structures_Logic.Graph;
 import Structures_Logic.LinkedClass;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -17,6 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.bcel.classfile.ClassFormatException;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Ventana principal de la aplicacion.
@@ -49,6 +52,7 @@ public class MainWindow extends JFrame
     private JList mainList;
     private JScrollPane scrollPane;
     private Graph grafo;
+    private Graph Subgrafo;
     private JButton Generate;
     private ClassList lista;
     private JButton Stats;
@@ -85,6 +89,12 @@ public class MainWindow extends JFrame
         this.mainPanel= new JLayeredPane();
         this.Generate= new JButton("Generate!");
         this.Stats= new JButton("JAR Statistics");
+        this.Subgrafo=new Graph();
+        try {
+            FileUtils.cleanDirectory(new File("src/Resources/JAR/"));
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Init();   
     }
     /**
@@ -171,6 +181,7 @@ public class MainWindow extends JFrame
                 {
                     grafo.init(lastFile.toString(),lastFile.getName());
                     lista= grafo.getListClass().ConvertToClassList();
+                    gestor.generateDisplay();
                 } catch (IOException ex) 
                 {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -204,7 +215,7 @@ public class MainWindow extends JFrame
         Stats.setEnabled(false);
         Stats.addActionListener(e->{
             dispose();
-            gestor.showStatics(lista);
+            gestor.showStatics(lista,true);
         });
         Panel1.add(Stats);
         
@@ -388,6 +399,7 @@ public class MainWindow extends JFrame
         jarTab.setText("Jars");
         jarTab.setFocusPainted(false);
         jarTab.setForeground(Color.BLACK);
+        jarTab.setEnabled(true);
        
         this.mainPanel.add(allTab,2,0);
         allTab.setBounds(915,620,85,26);
@@ -396,6 +408,7 @@ public class MainWindow extends JFrame
         allTab.setText("All Files");
         allTab.setFocusPainted(false);
         allTab.setForeground(Color.BLACK);
+        allTab.setEnabled(true);
         
         this.mainPanel.add(missingTab,2,0);
         missingTab.setBounds(625,620,135,26);
@@ -411,7 +424,33 @@ public class MainWindow extends JFrame
         mainList.setForeground(Color.WHITE);
         mainList.setBounds(0,0,1000,646);
         
-        //Complete.setBackground(new Color(84,19,136));
+        mainList.addMouseListener(new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent evt) 
+            {
+                JList list = (JList)evt.getSource();
+                if (evt.getClickCount() == 2) 
+                {
+                    int index = list.locationToIndex(evt.getPoint());
+                    String s= list.getModel().getElementAt(index).toString();
+                    if(s.endsWith(".jar"))
+                    {
+                        try {
+                            Subgrafo=grafo.makeSubGraph(s);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassFormatException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        lastFile=Subgrafo.getLastFile();
+                        setSubgraph();
+                        
+                    }
+                } 
+            }
+        });
         
         classList.addElement(" -----------------------------------------------------------------Classes----------------------------------------------------------------");
         setList(grafo.getALLclases(),classList,"classes");
@@ -562,6 +601,113 @@ public class MainWindow extends JFrame
             }
             ind++;
         }
+    }
+    public void setSubgraph()
+    {
+        this.clean();
+        clean();
+        statusBar.setLayout(null);
+        statusBar.add(Status);
+        statusBar.add(Completeness);
+        
+        fileName.setText(lastFile.getName()+"/Classes");
+        fileName.setBounds(0,0,800,28);
+        
+        Completeness.setBounds(880,0,147,28);
+        Completeness.setText("UNKNOWN");
+        
+        Status.setBounds(800,0,53,28);
+        Status.setText("Status: ");
+        
+        this.mainPanel.add(classTab,2,0);
+        classTab.setBounds(755,620,85,26);
+        classTab.setBackground(new Color(235,60,1));
+        classTab.setBorder(BorderFactory.createMatteBorder(2,2,2,2,borderColor));
+        classTab.setText("Classes");
+        classTab.setFocusPainted(false);
+        classTab.setForeground(Color.BLACK);
+        
+        this.mainPanel.add(jarTab,2,0);
+        jarTab.setBounds(835,620,85,26);
+        jarTab.setBackground(new Color(0,184,0));
+        jarTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        jarTab.setText("Jars");
+        jarTab.setFocusPainted(false);
+        jarTab.setForeground(Color.BLACK);
+        jarTab.setEnabled(true);
+       
+        this.mainPanel.add(allTab,2,0);
+        allTab.setBounds(915,620,85,26);
+        allTab.setBackground(new Color(0,184,0));
+        allTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        allTab.setText("All Files");
+        allTab.setFocusPainted(false);
+        allTab.setForeground(Color.BLACK);
+        allTab.setEnabled(true);
+        
+        this.mainPanel.add(missingTab,2,0);
+        missingTab.setBounds(625,620,135,26);
+        missingTab.setBackground(new Color(0,184,0));
+        missingTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        missingTab.setText("Missing Dependencies");
+        missingTab.setFocusPainted(false);
+        
+        missingTab.setForeground(Color.BLACK);
+        
+        mainList.setBackground(backColor);
+        mainList.setFont(mainList.getFont().deriveFont(Font.PLAIN,20));
+        mainList.setForeground(Color.WHITE);
+        mainList.setBounds(0,0,1000,646);
+        
+        mainList.addMouseListener(new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent evt) 
+            {
+                JList list = (JList)evt.getSource();
+                if (evt.getClickCount() == 2) 
+                {
+                    int index = list.locationToIndex(evt.getPoint());
+                    String s= list.getModel().getElementAt(index).toString();
+                    if(s.endsWith(".jar"))
+                    {
+                        try {
+                            Subgrafo=grafo.makeSubGraph(s);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassFormatException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        lastFile=Subgrafo.getLastFile();
+                        setSubgraph();
+                        
+                    }
+                } 
+            }
+        });
+        classList.addElement(" -----------------------------------------------------------------Classes----------------------------------------------------------------");
+        setList(Subgrafo.getALLclases(),classList,"classes");
+        
+        jarList.addElement(" -----------------------------------------------------------------Jars--------------------------------------------------------------------");
+        setList(Subgrafo.getAllJars(),jarList,"jar");
+        
+        allFileList.addElement(" ----------------------------------------------------------------All Files-----------------------------------------------------------------");
+        allFileList.addElement(" >>>CLASSES");
+        setList(Subgrafo.getALLclases(),allFileList,"all");
+        allFileList.addElement(" >>>JARS");
+        setList(Subgrafo.getAllJars(),allFileList,"all");
+
+        
+        missingList.addElement(" --------------------------------------------------------Missing Dependencies-------------------------------------------------------");
+        setList("",missingList,"miss");
+        
+        mainList.setModel(classList);
+        
+        jarTab.setEnabled(true);
+        allTab.setEnabled(true);
+        
+        lista= Subgrafo.getListClass().ConvertToClassList();
     }
     
     

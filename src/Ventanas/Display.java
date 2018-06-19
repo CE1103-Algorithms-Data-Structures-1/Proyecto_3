@@ -99,6 +99,7 @@ public class Display extends JFrame
     this.canvas= new ClassCanvas(lista);
     canvas.setBounds(0,0,1300,700);
     this.getContentPane().add(canvas);
+    canvas.removeAll();
   }
   public class ClassCanvas extends JComponent
   {
