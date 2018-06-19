@@ -15,12 +15,14 @@ import org.apache.bcel.classfile.Method;
  * @author dgarcia
  */
 public class ObjectClass {
-    private final ArrayList methods;
-    private final ArrayList atributes;
+    
+    private final ArrayList<String> methods;
+    private final ArrayList<String> atributes;
     private final JavaClass valClass;
     private final String name;
     private ObjectClass next;
     private final LinkedList listofRef;
+    private LinkedList listofDep;
     
     
     /**
@@ -34,9 +36,10 @@ public class ObjectClass {
     public ObjectClass(String n , JavaClass c , LinkedList l){
         this.valClass = c;
         this.name = n;
-        this.methods = new ArrayList();
-        this.atributes = new ArrayList();
+        this.methods = new ArrayList<>();
+        this.atributes = new ArrayList<>();
         this.listofRef = l;
+        this.listofDep = null;
         Method []mt = c.getMethods();
         Attribute[] at = c.getAttributes();
         
@@ -49,6 +52,17 @@ public class ObjectClass {
         
         
         
+        
+    }
+    /**
+     * Añade una LinkedList al atributo listofDep 
+     * @param l LinkedList a añadir
+     */
+    public void setListOfDep(LinkedList l){
+        if(this.listofDep == null){
+            
+            this.listofDep = l;
+        }
         
     }
     
@@ -100,6 +114,30 @@ public class ObjectClass {
      */
     public ObjectClass getNext(){
         return this.next;
+    }
+    /**
+     * Retorna la lista de metodos pero en una cadena de strings separados por
+     * un "@"
+     * @return String con todos los nombres 
+     */
+    public String getMethodsToString(){
+        String result = "";
+        for(int i = 0 ; i < this.methods.size() ;i++){
+            result += this.methods.indexOf(i)+"@";
+        }
+        return result;
+    } 
+    /**
+     * Retorna un String con todos los nombres de atributos de la clase ]
+     * los nombres separados  con "@"
+     * @return String con los nombres de los atributos
+     */
+    public String getAtributesToString(){
+        String result = "";
+        for(int i = 0 ; i < this.atributes.size() ;i++){
+            result += this.atributes.indexOf(i)+"@";
+        }
+        return result;
     }
 
 }
