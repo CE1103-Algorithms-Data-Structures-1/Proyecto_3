@@ -19,8 +19,9 @@ public class Display extends JFrame
     private final Gestor gestor;
     private final String title;
     private final Image icon;
-    private Canvas canvas;
+    private JComponent canvas;
     private final Color back;
+    
     
   public Display(String title,Image icon,Gestor gest)
   {
@@ -52,13 +53,13 @@ public class Display extends JFrame
   public void Generate(ClassList lista)
   {
     this.canvas= new ClassCanvas(lista);
-    canvas.setBackground(back);
     canvas.setBounds(0,0,1300,700);
     this.getContentPane().add(canvas);
   }
-  public class ClassCanvas extends Canvas
+  public class ClassCanvas extends JComponent
   {
       private ClassList lista;
+      private Graphics graphics;
       ClassCanvas(ClassList lista)
       {
         this.lista=lista;
@@ -69,6 +70,8 @@ public class Display extends JFrame
         int indC=0;
         int indD=0;
         Clase actual=null;
+        this.graphics=g;
+        canvas.setBackground(back);
         while(lista.Get(indC)!=null)
         {
             Graphics2D g2d = (Graphics2D) g.create();
@@ -78,19 +81,39 @@ public class Display extends JFrame
                 Clase depAct=actual.getDeps().Get(indD);
                 g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                 g2d.setColor(Color.BLACK);
-                g2d.drawLine(actual.getX()+100,actual.getY()+50,depAct.getX(),depAct.getY());
+                g2d.drawLine(actual.getX()+actual.getXRcoord(),actual.getY()+15,depAct.getX(),depAct.getY());
                 indD++;
                 //this.repaint();
             }
-            g2d.setColor(Color.WHITE);
-            g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-            g2d.fillRect(actual.getX(),actual.getY(),100,100);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(actual.getX(),actual.getY(),100,100);
+            JLabel label= new JLabel();
+            label.setText(actual.getName());
+            label.setFont(label.getFont().deriveFont(Font.ITALIC,12));
+            label.setForeground(Color.BLACK);
+            label.setBounds(actual.getX(),actual.getY(),actual.getXRcoord(),30);
+            label.setBackground(Color.GREEN);
+            label.setOpaque(true);
+            //label.setLocation(actual.getX(),actual.getY());
+            canvas.add(label);
+            label.repaint();
+            
+//            g2d.setColor(Color.WHITE);
+//            g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+//            g2d.fillRect(actual.getX(),actual.getY(),actual.getXRcoord(),30);
+//            g2d.setColor(Color.BLACK);
+//            g2d.drawRect(actual.getX(),actual.getY(),actual.getXRcoord(),30);
+//            g2d.setColor(Color.BLACK);
+//            g2d.drawString(actual.getName(),actual.getX()+10,actual.getY()+20);
             indC++;
             indD=0;
         }
         
+      }
+      @Override
+      public void setBackground(Color c)
+      {
+          Graphics2D g2d = (Graphics2D) graphics.create();
+          g2d.setColor(c);
+          g2d.fillRect(0,0,1300,700);
       }
   }
 }

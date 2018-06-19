@@ -197,7 +197,7 @@ public class MainWindow extends JFrame
         });
         Panel1.add(Stats);
         
-        JButton Generate= new JButton("Generate!");
+        JButton Generate= new JButton("Generate!\n\rhola");
         Generate.setBackground(Color.DARK_GRAY);
         Generate.setFont(Generate.getFont().deriveFont(Font.BOLD,28));
         Generate.setForeground(Color.BLACK);
@@ -212,29 +212,32 @@ public class MainWindow extends JFrame
                 
                 ClassList a=new ClassList();
                 
-                a.Add(new Clase(null,null,"Prueba 3",10,600,10,10));
-                a.Add(new Clase(null,null,"Prueba 3",10,600,10,10));
+                a.Add(new Clase(null,null,"Clase A",10,10));
+                a.Add(new Clase(null,null,"Clase C",10,10));
                 
                 ClassList b=new ClassList();
                 
-                b.Add(new Clase(null,null,"Prueba 3",100,150,300,30));
-                b.Add(new Clase(null,null,"Prueba 3",500,550,300,230));
+                b.Add(new Clase(null,null,"Clase B",300,30));
+                b.Add(new Clase(null,null,"Clase AK7 miher, regaleme una tejita",300,230));
                 
                 ClassList c=new ClassList();
                 
-                c.Add(new Clase(null,null,"Prueba 3",400,250,10,10));
-                c.Add(new Clase(null,null,"Prueba 3",100,150,10,10));
+                c.Add(new Clase(null,null,"Clase A",10,10));
+                c.Add(new Clase(null,null,"Clase B",10,10));
                 
                 ClassList d=new ClassList();
                 
-                d.Add(new Clase(null,null,"Prueba 3",400,250,300,230));
-                d.Add(new Clase(null,null,"Prueba 3",500,550,300,230));
+                d.Add(new Clase(null,null,"Clase A",10,10));
+                d.Add(new Clase(null,null,"Clase AK7 miher, regaleme una tejita",10,10));
                 
                 ClassList lista= new ClassList();
                 
-                lista.Add(new Clase(a,b,"Prueba 1",400,200,10,10));
-                lista.Add(new Clase(c,d,"Prueba 2",100,100,10,10));
-                lista.Add(new Clase(d,c,"Prueba 2",500,500,10,10));
+                lista.Add(new Clase(a,b,"Clase A",10,10));
+                lista.Add(new Clase(c,d,"Clase B",10,10));
+                lista.Add(new Clase(d,c,"Clase AK7 miher, regaleme una tejita",10,10));
+                lista.printDepsCoords();
+                assignCoords(lista);
+                lista.printDepsCoords();
                 gestor.Generate(lista);
                 Generate.setEnabled(false);
             
@@ -473,6 +476,9 @@ public class MainWindow extends JFrame
             }
         }
     }
+    /**
+     * Metodo para dejar todas las listas en blanco.
+     */
     public void clean()
     {
         classList.clear();
@@ -480,5 +486,75 @@ public class MainWindow extends JFrame
         missingList.clear();
         allFileList.clear();
     }
-  
+    /**
+     * Metodo para asignar las coordenadas en el canvas de cada una de las clases.
+     * @param listaP ClassList de clases
+     */
+    public void assignCoords(ClassList listaP)
+    {
+        int x=10;
+        int y=350;
+        int x0=10;
+        int y0=10;
+        int ind=0;
+        int bigstx=0;
+        Boolean inicial=true;
+        while(listaP.Get(ind)!=null)
+        {
+            Clase actual=listaP.Get(ind);
+            actual.assignCoords(x, y);
+            if(inicial)
+            {
+                bigstx=actual.getXRcoord();
+                x=50+bigstx;
+                y=y0;
+                inicial=!inicial;
+                
+            }
+            else
+            {
+               if(actual.getY()+30>595)
+               {
+                   if(x+actual.getXRcoord()>1195)
+                   {
+                       x=x0;
+                       y=y0;
+                       actual.assignCoords(x, y);
+                      
+                   }
+                   else
+                   {
+                        y=y0;
+                        x=x+bigstx+50;
+                        actual.assignCoords(x, y);
+                        bigstx=actual.getXRcoord();
+                   }
+               }
+               if(actual.getXRcoord()>bigstx)
+                {
+                    bigstx=actual.getXRcoord();
+                }
+               y+=100;
+            }
+            ind++;
+            
+        }
+        ind=0;
+        while(listaP.Get(ind)!=null)
+        {
+            Clase actual=listaP.Get(ind);
+            int ind2=0;
+            while(actual.getDeps().Get(ind2)!=null)
+            {
+                Clase depActual=actual.getDeps().Get(ind2);
+                if(listaP.inList(depActual.getName()))
+                {
+                    depActual.assignCoords(listaP.getCoordByName(depActual.getName(),"x"),listaP.getCoordByName(depActual.getName(),"y"));
+                }
+                ind2++;
+            }
+            ind++;
+        }
+    }
+    
 }

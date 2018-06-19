@@ -14,8 +14,9 @@ import Structures_Interface.ClassList;
 public class Clase 
 {
     private final String name;
-    private final int Xcoord;
-    private final int Ycoord;
+    private int Xcoord;
+    private int Ycoord;
+    private int XRcoord;
     private int depNum;
     private int refNum;
     private final int GrdEnt;
@@ -23,7 +24,7 @@ public class Clase
     private final ClassList deps;
     private final ClassList refs;
     
-    public Clase(ClassList ref, ClassList dep,String name, int x, int y,int ent,int sal)
+    public Clase(ClassList ref, ClassList dep,String name,int ent,int sal)
     {
         this.deps=dep;
         this.refs=ref;
@@ -38,8 +39,6 @@ public class Clase
             this.refNum=0;
         }
         this.name=name;
-        this.Xcoord=x;
-        this.Ycoord=y;
         this.GrdEnt=ent;
         this.GrdSal=sal;
     }
@@ -102,5 +101,36 @@ public class Clase
     public int grdSal()
     {
         return this.GrdSal;
+    }
+    /**
+     * Metodo para asignar las coordenadas de la lista
+     * @param x int coordenadas en x
+     * @param y int coordenadas en y
+     */
+    public void assignCoords(int x,int y)
+    {
+        this.Xcoord=x;
+        this.Ycoord=y;
+        if(name.length()>30&&name.length()<100)
+        {
+            this.XRcoord=name.length()*6;
+        }
+        else if(name.length()<30)
+        {
+            this.XRcoord=name.length()*10;
+        }
+       
+        else
+        {
+            this.XRcoord=name.length()*5;
+        }
+    }
+    /**
+     * Metodo para obtener la coordenada del rectangulo.
+     * @return int XRcoord
+     */
+    public int getXRcoord()
+    {
+        return this.XRcoord;
     }
 }
