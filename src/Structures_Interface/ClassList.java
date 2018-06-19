@@ -6,6 +6,7 @@
 package Structures_Interface;
 
 import Grafico.Clase;
+import Statics.Rank;
 
 /**
  *Lista enlazada simple 
@@ -177,5 +178,17 @@ public class ClassList
             temp=temp.getNext();
             System.out.println("-------------------------------------------------------");
         }
+    }
+    public RankList ConvertToRankList()
+    {
+         RankList rank= new RankList();
+         ClassNode temp=this.Head;
+         while(temp!=null)
+         {
+             Rank rnk= new Rank(temp.getValue().getDepNumb(),temp.getValue().getRefNumb(),temp.getValue().getName());
+             rank.add(rnk);
+             temp=temp.getNext();
+         }
+         return rank;
     }
 }
