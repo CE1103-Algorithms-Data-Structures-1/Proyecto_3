@@ -44,6 +44,50 @@ public class Display extends JFrame
     this.setLocationRelativeTo(null);
     this.setLayout(null);
     
+    JPanel Bar= new JPanel();
+        Bar.setSize(new Dimension(1300,25));
+        Bar.setBackground(new Color(57,61,63));
+        Bar.setLocation(0,0);
+        Bar.setLayout(null);
+        this.add(Bar);
+        
+        JButton exit= new JButton();
+        exit.setBackground(Color.RED);
+        exit.setForeground(Color.WHITE);
+        exit.setBorder(null);
+        exit.setText("X");
+        exit.setBounds(1270,0,30,25);
+        exit.setFocusPainted(false);
+        exit.addActionListener(e->{
+                System.exit(0);
+            
+        });
+        Bar.add(exit);
+        
+        JButton minimize= new JButton();
+        minimize.setBackground(Color.GRAY);
+        minimize.setForeground(Color.BLACK);
+        minimize.setBorder(null);
+        minimize.setText("---");
+        minimize.setBounds(1240,0,30,25);
+        minimize.setFocusPainted(false);
+        minimize.addActionListener(e -> {
+            setState(Frame.ICONIFIED);
+        });
+        Bar.add(minimize);
+        
+        JButton goBack= new JButton();
+        goBack.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/arrow.png"))));
+        goBack.setBounds(0,0,24,24);
+        goBack.setFocusPainted(false);
+        goBack.setBackground(new Color(57,61,63));
+        goBack.setBorder(null);
+        goBack.addActionListener(e->{
+            
+            this.dispose();
+            gestor.showMain();
+        });
+        Bar.add(goBack,BorderLayout.NORTH);
     
     
   }
@@ -80,7 +124,7 @@ public class Display extends JFrame
             {
                 Clase depAct=actual.getDeps().Get(indD);
                 g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-                g2d.setColor(Color.BLACK);
+                g2d.setColor(new Color(235,60,1));
                 g2d.drawLine(actual.getX()+actual.getXRcoord(),actual.getY()+15,depAct.getX(),depAct.getY());
                 indD++;
                 //this.repaint();
@@ -90,19 +134,11 @@ public class Display extends JFrame
             label.setFont(label.getFont().deriveFont(Font.ITALIC,12));
             label.setForeground(Color.BLACK);
             label.setBounds(actual.getX(),actual.getY(),actual.getXRcoord(),30);
+            label.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
             label.setBackground(Color.GREEN);
             label.setOpaque(true);
-            //label.setLocation(actual.getX(),actual.getY());
             canvas.add(label);
             label.repaint();
-            
-//            g2d.setColor(Color.WHITE);
-//            g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-//            g2d.fillRect(actual.getX(),actual.getY(),actual.getXRcoord(),30);
-//            g2d.setColor(Color.BLACK);
-//            g2d.drawRect(actual.getX(),actual.getY(),actual.getXRcoord(),30);
-//            g2d.setColor(Color.BLACK);
-//            g2d.drawString(actual.getName(),actual.getX()+10,actual.getY()+20);
             indC++;
             indD=0;
         }

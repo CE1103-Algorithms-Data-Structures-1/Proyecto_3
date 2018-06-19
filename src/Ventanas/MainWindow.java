@@ -11,6 +11,7 @@ import Structures_Logic.Graph;
 import Structures_Logic.LinkedClass;
 import java.awt.*;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -48,6 +49,7 @@ public class MainWindow extends JFrame
     private JList mainList;
     private JScrollPane scrollPane;
     private Graph grafo;
+    private JButton Generate;
     
     public MainWindow(String title,Image icono,Gestor gestor)
     {
@@ -80,6 +82,7 @@ public class MainWindow extends JFrame
         this.missingList= new DefaultListModel();
         this.Complete= new JButton("Complete using Maven™");
         this.mainPanel= new JLayeredPane();
+        this.Generate= new JButton("Generate!");
         Init();   
     }
     /**
@@ -179,6 +182,8 @@ public class MainWindow extends JFrame
                 
                 System.out.println(lastFile.getName());
                 System.out.println(lastFile);
+               Generate.setBackground(new Color(235,60,1));
+               Generate.setEnabled(true);
 
             }
         });
@@ -197,49 +202,28 @@ public class MainWindow extends JFrame
         });
         Panel1.add(Stats);
         
-        JButton Generate= new JButton("Generate!\n\rhola");
+        
         Generate.setBackground(Color.DARK_GRAY);
         Generate.setFont(Generate.getFont().deriveFont(Font.BOLD,28));
         Generate.setForeground(Color.BLACK);
         Generate.setBounds(0,360,300,65);
         Generate.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
         Generate.setFocusPainted(false);
-        Generate.setEnabled(true);
+        Generate.setEnabled(false);
         Generate.addActionListener(e->{
                 Generate.setBackground(new Color(235,60,1));
                 Generate.setForeground(Color.BLACK);
                 Generate.setText("Generating...");
+                Generate.setEnabled(false);
+                ClassList lista= grafo.getListClass().ConvertToClassList();
                 
-                ClassList a=new ClassList();
-                
-                a.Add(new Clase(null,null,"Clase A",10,10));
-                a.Add(new Clase(null,null,"Clase C",10,10));
-                
-                ClassList b=new ClassList();
-                
-                b.Add(new Clase(null,null,"Clase B",300,30));
-                b.Add(new Clase(null,null,"Clase AK7 miher, regaleme una tejita",300,230));
-                
-                ClassList c=new ClassList();
-                
-                c.Add(new Clase(null,null,"Clase A",10,10));
-                c.Add(new Clase(null,null,"Clase B",10,10));
-                
-                ClassList d=new ClassList();
-                
-                d.Add(new Clase(null,null,"Clase A",10,10));
-                d.Add(new Clase(null,null,"Clase AK7 miher, regaleme una tejita",10,10));
-                
-                ClassList lista= new ClassList();
-                
-                lista.Add(new Clase(a,b,"Clase A",10,10));
-                lista.Add(new Clase(c,d,"Clase B",10,10));
-                lista.Add(new Clase(d,c,"Clase AK7 miher, regaleme una tejita",10,10));
                 lista.printDepsCoords();
                 assignCoords(lista);
                 lista.printDepsCoords();
                 gestor.Generate(lista);
-                Generate.setEnabled(false);
+                
+                
+            
             
         });
         Panel1.add(Generate);
@@ -357,11 +341,13 @@ public class MainWindow extends JFrame
                 mainList.setModel(missingList);
                 
             
-        });
-        
+        });  
+    }
     
-        
-        
+    public void goingBack()
+    {
+        this.Generate.setEnabled(true);
+        this.Generate.setText("Generate!");
     }
     /**
      * Metodo para actualizar la pantalla.
@@ -495,7 +481,7 @@ public class MainWindow extends JFrame
         int x=10;
         int y=350;
         int x0=10;
-        int y0=10;
+        int y0=50;
         int ind=0;
         int bigstx=0;
         Boolean inicial=true;
@@ -555,6 +541,14 @@ public class MainWindow extends JFrame
             }
             ind++;
         }
+    }
+    public void timeout()
+    {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
     
 }

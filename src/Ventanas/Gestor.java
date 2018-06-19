@@ -29,9 +29,14 @@ public class Gestor
         this.statics= new Statics(title,icon,this);
         this.display= new Display(title,icon,this);
     }
+    public void showMainS()
+    {
+        this.main.setVisible(true);
+    }
     public void showMain()
     {
         this.main.setVisible(true);
+        this.main.goingBack();
     }
     public void showStatics()
     {
@@ -52,6 +57,7 @@ public class Gestor
     public void Generate(ClassList lista)
     {
         this.showDisplay();
+        main.dispose();
         this.display.Generate(lista);
     }
 }

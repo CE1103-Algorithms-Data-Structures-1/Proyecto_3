@@ -72,7 +72,8 @@ public class Graph {
         ObjectClass tempClass = this.graphListOfClass.getHead();
         while(tempClass != null){
             
-            tempClass.setListOfDep(this.generateListofDep(tempClass.getName()));        
+            tempClass.setListOfDep(this.generateListofDep(tempClass.getName()));
+//            tempClass.getListOfDep().setSaliente(size);
             tempClass = tempClass.getNext();
         }
         
@@ -101,6 +102,14 @@ public class Graph {
      */
     public void setListClass(LinkedClass l){
         this.graphListOfClass = l;
+    }
+    /**
+     * Metodo para obtener la lista de clases del grafo.
+     * @return 
+     */
+    public LinkedClass getListClass()
+    {
+        return this.graphListOfClass;
     }
     /**
      * Insert con un parametro agrega el verticeinicial

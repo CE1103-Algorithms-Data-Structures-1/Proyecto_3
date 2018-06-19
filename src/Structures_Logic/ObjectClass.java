@@ -65,6 +65,10 @@ public class ObjectClass {
         }
         
     }
+    public LinkedList getListOfDep()
+    {
+        return this.listofDep;
+    }
     
     /**
      * Retorna el la clase que almacena el nodo

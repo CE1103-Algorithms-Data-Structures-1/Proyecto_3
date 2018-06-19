@@ -5,6 +5,8 @@
  */
 package Structures_Logic;
 
+import Grafico.Clase;
+import Structures_Interface.ClassList;
 import org.apache.bcel.classfile.JavaClass;
 
 /**
@@ -80,5 +82,21 @@ public class LinkedClass {
         }
        this.size++;
     }    
-    
+    /**
+     * Metodo para convertir de lista logica a lista grafica.
+     * @return 
+     */
+    public ClassList ConvertToClassList()
+    {
+        ObjectClass temp= this.head;
+        ClassList converted= new ClassList();
+        while(temp!=null)
+        {
+            
+            converted.Add(new Clase(temp.getListOfRef().ConvertToClassList(),temp.getListOfDep().ConvertToClassList(),temp.getName(),temp.getListOfDep().getSize(),temp.getListOfRef().getSize()));
+            temp=temp.getNext();
+        }
+        return converted;
+    }    
+
 }
