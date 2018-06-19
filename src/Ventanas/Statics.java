@@ -72,7 +72,7 @@ public class Statics extends JFrame
         goBack.addActionListener(e->{
             
             this.dispose();
-            gestor.showMain();
+            gestor.showMainS();
         });
         this.add(goBack,BorderLayout.NORTH);
         

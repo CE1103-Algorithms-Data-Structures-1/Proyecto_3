@@ -27,7 +27,7 @@ public class Main
     public static void main(String[] args) throws IOException, ClassFormatException, ClassNotFoundException 
     {
         Gestor gestor = new Gestor();
-        gestor.showMain();
+        gestor.showMainS();
 
     }
     

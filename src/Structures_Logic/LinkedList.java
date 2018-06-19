@@ -5,6 +5,9 @@
  */
 package Structures_Logic;
 
+import Grafico.Clase;
+import Structures_Interface.ClassList;
+
 
 
 /**
@@ -15,12 +18,22 @@ public class LinkedList {
     
     private int size; // largo de la lista
     private Node head,tail; // cabeza de la lista
+    private int saliente;
     /**
      * Constructor de la clase 
      */
     public LinkedList(){
         this.size = 0; // iniciando largo en 0
         this.head = this.tail = null; // iniciando la cabeza en nulo
+        this.saliente = 0;
+    }
+    public void setSaliente(int s)
+    {
+        this.saliente=s;
+    }
+    public int getSaliente()
+    {
+        return this.saliente;
     }
     /**
      * Retorna la cabeza de la lista enlazada
@@ -36,6 +49,7 @@ public class LinkedList {
     public boolean isEmpty(){
         return this.head == null;
     }
+   
     /**
      * Retorna el largo de la lista
      * @return atributo size
@@ -91,4 +105,20 @@ public class LinkedList {
            System.out.println("");
        }
     }
+    /**
+     * Metodo para convertir una LinkedList en ClassList
+     * @return 
+     */
+    public ClassList ConvertToClassList()
+    {
+        Node temp=this.head;
+        ClassList converted=new ClassList();
+        while(temp!=null)
+        {
+            converted.Add(new Clase(null,null,temp.getVertex().getID(),0,0));
+            temp=temp.getNext();
+        }
+        return converted;
+    }
+
 }
