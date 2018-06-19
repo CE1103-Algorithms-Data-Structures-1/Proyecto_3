@@ -1,16 +1,28 @@
 package Structures_Logic;
 
+import static com.oracle.jrockit.jfr.DataType.UTF8;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringWriter;
+import static java.lang.System.in;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import org.apache.bcel.classfile.ClassFormatException;
+import sun.misc.IOUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Crea la estructura grafo y administra la creación de vertices
@@ -25,6 +37,8 @@ public class Graph {
     private final List jars; //lista de jars
     private final List clases; // lista de clases
     private ZipFile zipFile; // archivo del que sse sacan los jars y clases
+    private File resourcesDirectory;
+    private JarFile f;
 
     /**
      * Constructor de la clase Graph
@@ -37,6 +51,8 @@ public class Graph {
         jars = new ArrayList<>();
         clases =  new ArrayList<>();
         this.zipFile = null;
+        this.f = null;
+        
     }
 
     /**
@@ -50,7 +66,7 @@ public class Graph {
     public void init(String path ,String name) 
             throws IOException, ClassFormatException, ClassNotFoundException{
         
-        
+        resourcesDirectory= new File(path);
         File firstJar = new File(path);
         this.insert(firstJar.getName());
         zipFile = new ZipFile(path);
@@ -58,7 +74,7 @@ public class Graph {
         ZipEntry entry;
         
         
-        JarFile f = new JarFile(path);
+        f = new JarFile(path);
         ReferenceFinder rf = new ReferenceFinder();
         rf.findReferences(f.getName(), f);               
         this.setListClass(rf.getLinkedClass());     
@@ -346,13 +362,22 @@ public class Graph {
         return "";
     }
     
-    private Graph createNewGraph(String n) 
+    public Graph createNewGraph(String n) 
             throws IOException,ClassFormatException, ClassNotFoundException{
         
         
-        String newPath = this.zipFile.getClass().getClassLoader().getResource(n).toExternalForm();
+        //String newPath = this.f.getClass().getResource(n).toExternalForm();
+       
+        ZipEntry z= new ZipEntry(n);
+        InputStream is = this.f.getInputStream(z);
+        this.resourcesDirectory = new File("src/Resources/JAR/"+n);
+        if(!resourcesDirectory.exists())
+            {
+            Files.copy(is,resourcesDirectory.toPath());
+            }
         Graph g = new Graph();
-        g.init(newPath, n);
+        g.init(resourcesDirectory.toPath().toString(),resourcesDirectory.getName());
+        
         
         return g;
     }
@@ -386,6 +411,10 @@ public class Graph {
     private Long[][] makeAdjacencyMatrix(){
         Long[][] adjMat = new Long[this.graphListOfClass.getSize()][this.graphListOfClass.getSize()]; 
         return adjMat;
+    }
+    public File getLastFile()
+    {
+        return this.resourcesDirectory;
     }
 
     
