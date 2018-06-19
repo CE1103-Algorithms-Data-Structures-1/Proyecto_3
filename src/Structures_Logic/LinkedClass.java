@@ -79,6 +79,32 @@ public class LinkedClass {
             this.tail = n;
         }
        this.size++;
-    }    
+    }  
+    /**
+     * Encuantra un nodo en la lista al buscarlo por el indice
+     * @param i indice a buscar
+     * @return el objeto clase buscado
+     */
+    public ObjectClass indexOf(int i){
+        
+        if(i>this.size || i < this.size){
+            System.out.println("index out of range!");
+            return null;
+        }else{
+            
+        
+        ObjectClass temp = this.getHead();
+        int cont = 0;
+        while(temp != null){
+            if(cont == i){
+                return temp;
+            }
+            temp = temp.getNext();
+        }
+        return null;
+        }
+    }
+    
+    
     
 }
