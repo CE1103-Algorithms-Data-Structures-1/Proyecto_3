@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -26,17 +27,21 @@ public class Graph {
     
     private int size; //numero de vertices en el grafo
     private final LinkedList lisfOFVertex; //lista de vertices en el grafo
-    private final List jars;
-    private final List clases;
+    private LinkedClass graphListOfClass;  // lista de clases con referencias
+    private final List jars; //lista de jars
+    private final List clases; // lista de clases
+    private ZipFile zipFile; // archivo del que sse sacan los jars y clases
     /**
      * Constructor de la clase Graph
      */
     public Graph(){
         
         this.lisfOFVertex = new LinkedList(); // se inicia la lista de vertices
+        this.graphListOfClass = new LinkedClass(); // iniciando lista de clases
         this.size = 0; // se inicia el numero de vertices en 0
         jars = new ArrayList<>();
         clases =  new ArrayList<>();
+        this.zipFile = null;
     }
     /**
      * Inicializa el grafo utilizando un archivo de extencion jar
@@ -46,48 +51,61 @@ public class Graph {
      * @throws java.io.IOException 
      * @throws java.lang.ClassNotFoundException 
      */
-    public void init(String path ,String name) throws IOException, ClassFormatException, ClassNotFoundException{
-        this.insert(name);
+    public void init(String path ,String name) 
+            throws IOException, ClassFormatException, ClassNotFoundException{
+        
+        
         File firstJar = new File(path);
         this.insert(firstJar.getName());
-        ZipFile zipFile = new ZipFile(path);
+        zipFile = new ZipFile(path);
         ZipInputStream stream = new ZipInputStream(new BufferedInputStream(new FileInputStream(path)));
-        ZipEntry entry = null;
+        ZipEntry entry;
         
         
-        String lastname = "" , fnam = "";
+        JarFile f = new JarFile(path);
+        ReferenceFinder rf = new ReferenceFinder();
+        rf.findReferences(f.getName(), f);               
+        this.setListClass(rf.getLinkedClass());     
+        
+        
+        //Inicializando listas de dependencias de cada clase
+        ObjectClass tempClass = this.graphListOfClass.getHead();
+        while(tempClass != null){
+            
+            tempClass.setListOfDep(this.generateListofDep(tempClass.getName()));        
+            tempClass = tempClass.getNext();
+        }
         
         while((entry = stream.getNextEntry())!=null){
-            lastname = fnam;
-            fnam = entry.getName();
+
             
             if(entry.getName().endsWith(".jar")){
                 
-//                this.insert(entry.getName(), this.lisfOFVertex.getHead().getVertex().getID());
-//                this.init(path+"\\" + entry.getName(), entry.getName());
+                this.insert(entry.getName(), this.lisfOFVertex.getHead().getVertex().getID());
                 
                 jars.add(entry.getName());
                 
-            }else if(entry.getName().endsWith(".class")){
                 
-
-                //todo
-//                    JarFile f = new JarFile(path+entry.getName());
-//                    ReferenceFinder rf = new ReferenceFinder();
-//                    rf.findReferences(entry.getName(), f);               
-//                    
-//                    Vertex m = lisfOFVertex.findVertex(lastname);
-//                    m.setClassList(rf.getLinkedClass());
+            }else if(entry.getName().endsWith(".class")){
                     
                     clases.add(entry.getName());
             }
-            
-//            InputStream input = zipFile.getInputStream(entry);
-
+          
         }
         System.out.println("");
         this.showGraph();        
     }
+    /**
+     * Da valor al atributo graphListOfClass añadiendole una nueva lista 
+     * @param l LinkedClass a añadir al parametro
+     */
+    public void setListClass(LinkedClass l){
+        this.graphListOfClass = l;
+    }
+    /**
+     * Insert con un parametro agrega el verticeinicial
+     * @param name 
+     */
     
     public void insert(String name){
         insert(name,"");
@@ -151,6 +169,11 @@ public class Graph {
         
         return r;
     }
+    /**
+     * 
+     * Obtiene todos los nombres de los jars que se encuentren dentro del actual
+     * @return string con los nombres separados por un "@"
+     */
     public String getAllJars()
     {
         String result = "";
@@ -160,6 +183,11 @@ public class Graph {
         }
         return result;
     }
+    /**
+     * Obtiene todos los nombres de las clases que se encuentren dentro del jar
+     * actual
+     * @return string con los nombres separados por un "@"
+     */
     public String getALLclases(){
         String result = "";
         for(int i = 0 ; i<clases.size();i++){
@@ -168,51 +196,58 @@ public class Graph {
         }
         return result;
     }
+    
+    public Graph makeSubGraph(String name) 
+            throws IOException, ClassFormatException, ClassNotFoundException{
+        
+        return this.createNewGraph(name);
+    }
+    
     /**
      * Retorna un string separado con "@" con todos los nombres de clases dentro
      * de todos los archivos jar
      * @return r
      */
-    public String findAllClases(){
-        String r = "";
-        Node temp = this.lisfOFVertex.getHead();
-        
-        while(temp != null ){
-            
-            if(!temp.getVertex().getClassList().isEmpty()){
-                
-                ObjectClass obj = temp.getVertex().getClassList().getHead();
-                while(obj != null){
-                    r+=obj.getName()+"@";
-                    obj = obj.getNext();
-                }
-                temp = temp.getNext();
-            }
-        }
-        
-        return r;
-    }
+//    public String findAllClases(){
+//        String r = "";
+//        Node temp = this.lisfOFVertex.getHead();
+//        
+//        while(temp != null ){
+//            
+//            if(!temp.getVertex().getClassList().isEmpty()){
+//                
+//                ObjectClass obj = temp.getVertex().getClassList().getHead();
+//                while(obj != null){
+//                    r+=obj.getName()+"@";
+//                    obj = obj.getNext();
+//                }
+//                temp = temp.getNext();
+//            }
+//        }
+//        
+//        return r;
+//    }
     /**
      * Retorna un string separado con "@" con todos los nombres de los jars junto
      * con todos los nombre de las clases dentro de ellos
      * @return r
      */
-    public String findAllFiles(){
-        String r = "";
-        Node temp = this.lisfOFVertex.getHead();
-        while(temp != null ){
-            r += temp.getVertex().getID()+"@";
-            if(!temp.getVertex().getClassList().isEmpty()){
-                ObjectClass obj = temp.getVertex().getClassList().getHead();
-                while(obj != null){
-                    r+=obj.getName()+"@";
-                    obj = obj.getNext();
-                }
-                temp = temp.getNext();
-            }
-        }        
-        return r;
-    }
+//    public String findAllFiles(){
+//        String r = "";
+//        Node temp = this.lisfOFVertex.getHead();
+//        while(temp != null ){
+//            r += temp.getVertex().getID()+"@";
+//            if(!temp.getVertex().getClassList().isEmpty()){
+//                ObjectClass obj = temp.getVertex().getClassList().getHead();
+//                while(obj != null){
+//                    r+=obj.getName()+"@";
+//                    obj = obj.getNext();
+//                }
+//                temp = temp.getNext();
+//            }
+//        }        
+//        return r;
+//    }
     
     
     ///// Metodos privados //////
@@ -295,7 +330,46 @@ public class Graph {
         return "";
     }
     
+    private Graph createNewGraph(String n) 
+            throws IOException,ClassFormatException, ClassNotFoundException{
+        
+        
+        String newPath = this.zipFile.getClass().getClassLoader().getResource(n).toExternalForm();
+        Graph g = new Graph();
+        g.init(newPath, n);
+        
+        return g;
+    }
     
+    /**
+     * Crea una LinkedList de vertices que contienen los nombres de las clases
+     * que poseen este vertice en su lista de referencia 
+     * @param id nombre del vertice a buscar en las listas de las demmás clases
+     * @return Lista enlazada
+     */
+    private LinkedList generateListofDep(String id){
+        
+        LinkedList listDep = new LinkedList();
+        
+        ObjectClass temp = this.graphListOfClass.getHead();
+        
+        while(temp != null){
+            if(temp.getListOfRef().findVertex(id) != null){
+                
+                Vertex v = new Vertex(temp.getName());
+                listDep.add(v);
+                
+            } 
+            temp = temp.getNext();
+        }
+        
+        return listDep;
+    }
+    
+    private Long[][] makeAdjacencyMatrix(){
+        Long[][] adjMat = new Long[this.graphListOfClass.getSize()][this.graphListOfClass.getSize()]; 
+        return adjMat;
+    }
 
     
 }
