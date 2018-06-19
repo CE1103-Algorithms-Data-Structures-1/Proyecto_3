@@ -30,13 +30,14 @@ import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReferenceType;
 import org.apache.bcel.generic.Type;
 /**
+ * Encuentra las referencias entre clases dentro del jar.
  *
  * @author dgarcia
  */
 public class ReferenceFinder {
+
     private final LinkedClass listOFclass;
-    
-    
+
     public ReferenceFinder(){
         this.listOFclass = new LinkedClass();
     }
@@ -44,10 +45,10 @@ public class ReferenceFinder {
         return this.listOFclass;
     }
 
-      public  void findReferences(String jarName, JarFile jarFile) 
-        throws ClassFormatException, IOException, ClassNotFoundException
-    {
-        Map<String, JavaClass> javaClasses = 
+    public void findReferences(String jarName, JarFile jarFile)
+            throws ClassFormatException, IOException, ClassNotFoundException {
+
+        Map<String, JavaClass> javaClasses =
             collectJavaClasses(jarName, jarFile);
 
         for (JavaClass javaClass : javaClasses.values())
@@ -78,7 +79,6 @@ public class ReferenceFinder {
                 }
             }
             
-            
             //añadiendo clases a la lista de clases
             this.listOFclass.add(javaClass.getClassName(), javaClass , listofRef); 
             
@@ -87,8 +87,8 @@ public class ReferenceFinder {
 
     private  Map<String, JavaClass> collectJavaClasses(
         String jarName, JarFile jarFile) 
-            throws ClassFormatException, IOException
-    {
+            throws ClassFormatException, IOException {
+
         Map<String, JavaClass> javaClasses =
             new LinkedHashMap<String, JavaClass>();
         Enumeration<JarEntry> entries = jarFile.entries();
@@ -110,8 +110,8 @@ public class ReferenceFinder {
 
     public  Map<JavaClass, Set<Method>> computeReferences(
         JavaClass javaClass, Map<String, JavaClass> knownJavaClasses) 
-            throws ClassNotFoundException
-    {
+            throws ClassNotFoundException {
+
         Map<JavaClass, Set<Method>> references = 
             new LinkedHashMap<JavaClass, Set<Method>>();
         ConstantPool cp = javaClass.getConstantPool();
@@ -168,10 +168,18 @@ public class ReferenceFinder {
         return references;
     }
 
-    private  Method findMethod(
-        JavaClass javaClass, String methodName, Type argumentTypes[])
-            throws ClassNotFoundException
-    {
+    /**
+     * Encuentra metodo dentro de una clase específica.
+     *
+     * @param javaClass
+     * @param methodName
+     * @param argumentTypes
+     * @return
+     * @throws ClassNotFoundException
+     */
+    private Method findMethod(JavaClass javaClass, String methodName, Type argumentTypes[])
+            throws ClassNotFoundException {
+
         for (Method method : javaClass.getMethods())
         {
             if (method.getName().equals(methodName))

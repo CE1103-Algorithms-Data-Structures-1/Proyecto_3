@@ -6,6 +6,7 @@
 package Structures_Logic;
 
 /**
+ * Nodo para lista enlazada.
  *
  * @author dgarcia
  */
@@ -17,6 +18,7 @@ public class Node {
         this.ver = v;
         this.next = null;
     }
+
     /**
      * Retorna el nodo siguiente
      * @return retorna el atributo next
@@ -24,6 +26,7 @@ public class Node {
     public Node getNext(){
         return this.next;
     }
+
     /**
      * Asigna valor al atributo next del nodo
      * @param n nodo a asignar
@@ -31,10 +34,12 @@ public class Node {
     public void setNext(Node n){
         this.next = n;
     }
+
     /**
      * Retorna el vertice que se encuentra dentro del nodo
      * @return retorna el atributo ver
      */
+
     public Vertex getVertex(){
         return this.ver;
     }

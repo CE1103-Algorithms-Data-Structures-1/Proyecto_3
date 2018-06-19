@@ -3,12 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Logic/Graph.java</file>
-            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Ventanas/MainWindow.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Logic/Vertex.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Interface/ClassList.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Interface/RankList.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Grafico/Clase.java</file>
             <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Ventanas/Statics.java</file>
             <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Statics/Rank.java</file>
-            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Interface/LinkedList.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Logic/LinkedList.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Logic/LinkedClass.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Interface/RankNode.java</file>
             <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Main/Main.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Logic/ObjectClass.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Ventanas/Gestor.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Logic/Graph.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Logic/ReferenceFinder.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Ventanas/MainWindow.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Structures_Interface/ClassNode.java</file>
+            <file>file:/C:/Users/dcama/Desktop/Proyecto%203/src/Ventanas/Display.java</file>
         </group>
     </open-files>
 </project-private>

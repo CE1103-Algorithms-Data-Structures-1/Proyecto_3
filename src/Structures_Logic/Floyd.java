@@ -2,13 +2,11 @@
 package Structures_Logic;
 
 /**
+ * Algoritmo de Floyd utilizado para encontrar las rutas más rápidas de un vertice a cualquier otro.
  *
  * @author dgarcia
  */
 public class Floyd{
-  public Floyd(){
-
-  }
 
   public String Floyd(long [][] matrizAd){
     int vert = matrizAd.length;
@@ -74,6 +72,7 @@ public class Floyd{
     "\nDiferentes caminos:"+paths;
 
   }
+
   public String pathsR(int i , int k , String[][] auxP , String roadT){
     if(auxP[i][k].equals("")){
       return "";

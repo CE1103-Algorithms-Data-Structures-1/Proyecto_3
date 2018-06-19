@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Ventanas;
 
-import Statics.Rank;
+import Structures_Interface.ClassList;
 import Structures_Interface.RankList;
 import java.awt.*;
 import java.io.*;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -25,11 +17,15 @@ public class Statics extends JFrame
     private Gestor gestor;
     private JList depList;
     private JList refList;
+    private JScrollPane depscr;
+    private JScrollPane refscr;
     private RankList depends;
     private RankList refers;
     private DefaultListModel dep;
     private DefaultListModel ref;
-    public Statics(String title, Image icon, Gestor gestor)
+    private Boolean relatedcond;
+    private JLabel cond;
+    public Statics(String title, Image icon, Gestor gestor,Boolean relatedcond)
     {
         this.icon= icon;
         this.title= title;
@@ -38,10 +34,15 @@ public class Statics extends JFrame
         this.ref= new DefaultListModel();
         this.depList= new JList(dep);
         this.refList= new JList(ref);
+        this.depscr= new JScrollPane(depList);
+        this.refscr= new JScrollPane(refList);
         this.depends= new RankList();
         this.refers= new RankList();
+        this.relatedcond= relatedcond;
+        this.cond= new JLabel();
         this.Init();
     }
+
     /**
      * Metodo que inicializa las caracteristicas de la ventana.
      */
@@ -72,7 +73,7 @@ public class Statics extends JFrame
         goBack.addActionListener(e->{
             
             this.dispose();
-            gestor.showMain();
+            gestor.showMainS();
         });
         this.add(goBack,BorderLayout.NORTH);
         
@@ -83,7 +84,7 @@ public class Statics extends JFrame
         mostDep.setLayout(null);
         this.add(mostDep);
         
-        JLabel mostDepL= new JLabel(" Analyzed JARS with the Most Dependencies:");
+        JLabel mostDepL= new JLabel(" Classes with the Most Dependencies:");
         mostDepL.setBackground(new Color(0,184,0));
         mostDepL.setFont(mostDepL.getFont().deriveFont(Font.BOLD,18));
         mostDepL.setForeground(new Color(31,31,31));
@@ -99,7 +100,7 @@ public class Statics extends JFrame
         mostRef.setLayout(null);
         this.add(mostRef);
         
-        JLabel mostRefL= new JLabel(" Analyzed JARS with the Most References:");
+        JLabel mostRefL= new JLabel(" Classes with the Most References:");
         mostRefL.setBackground(new Color(0,184,0));
         mostRefL.setFont(mostRefL.getFont().deriveFont(Font.BOLD,18));
         mostRefL.setForeground(new Color(31,31,31));
@@ -108,68 +109,61 @@ public class Statics extends JFrame
         //mostRefL.setBorder(BorderFactory.createMatteBorder(4,4,4,4,Color.BLACK));
         mostRef.add(mostRefL,BorderLayout.LINE_START);
         
+        JLabel related= new JLabel();
+        related.setFont(mostRefL.getFont().deriveFont(Font.BOLD,18));
+        related.setForeground(new Color(0,184,0));
+        related.setText("Is Related?-->" );//+relatedcond);
+        related.setBounds(10,670,500,30);
+        this.add(related);
+        
+        
         
         depList.setBackground(Color.DARK_GRAY);
         depList.setBounds(4,60,412,496);
         depList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
         depList.setForeground(Color.BLACK);
-        mostDep.add(depList);
+        this.depscr.setBounds(4,60,412,496);
+        this.depscr.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.depscr.setBorder(null);
+        mostDep.add(depscr);
         
         refList.setBackground(Color.DARK_GRAY);
         refList.setBounds(4,60,412,496);
         refList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
         refList.setForeground(Color.BLACK);
-        mostRef.add(refList);
+        this.refscr.setBounds(4,60,412,496);
+        this.refscr.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.refscr.setBorder(null);
+        mostRef.add(refscr);
         
         
     }
+
     /**
      * Metodo para generar las listas de ranking.
      * @throws FileNotFoundException 
      */
-    public void generate() throws FileNotFoundException
+    public void generate(ClassList lista,Boolean r) 
    {
-        File file= new File("src\\Resources\\Estadisticas\\Dependencias.txt");
-        Scanner input = new Scanner(file);
-        while (input.hasNextLine()) 
-        {
-            String linea= input.nextLine();
-            String [] array= linea.split("@");
-            if(!linea.equals(""))
-            {
-            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
-            depends.add(elemento);
-            dep.addElement(elemento.getValue()+". "+elemento.getName()+": "+ elemento.getDep());
-            }
-        }
-        
-        File filer= new File("src\\Resources\\Estadisticas\\Referencias.txt");
-        Scanner inputr = new Scanner(filer);
-        while (inputr.hasNextLine()) 
-        {
-            String linea= inputr.nextLine();
-            String [] array= linea.split("@");
-            if(!linea.equals(""))
-            {
-            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
-            refers.add(elemento);
-            ref.addElement(elemento.getValue()+". "+elemento.getName()+": "+ elemento.getRef());
-            }
-            
-        }
-        try 
-        {
-            save();
-        } catch (IOException ex) 
-        {
-            Logger.getLogger(Statics.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+       RankList rankd=lista.ConvertToRankList();
+       rankd=rankd.orderDep();
+       rankd.assignPosition();
+       rankd.printAll();
+       RankList rankr=lista.ConvertToRankList();
+       rankr=rankr.orderRef();
+       rankr.assignPosition();
+       rankr.printAll();
+       dep=rankd.toList("d");
+       ref=rankr.toList("r");
+       depList.setModel(dep);
+       refList.setModel(ref);
+       this.relatedcond=r;
+       this.chnCond();
    }
-    /**
-     * Metodo para reiniciar los datos de las listas de estadistica. 
-     */
+
+   /**
+    * Metodo para reiniciar los datos de las listas de estadistica.
+    */
     public void refresh()
     {
         dep.removeAllElements();
@@ -177,40 +171,19 @@ public class Statics extends JFrame
         depends.clear();
         refers.clear();
     }
-    /**
-     * Metodo para guardar el ranking.
-     */
-    public void save() throws FileNotFoundException, IOException
+    public void chnCond()
     {
-        File file= new File("src/Resources/Estadisticas/Dependencias.txt");
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
-        writer.print("");
-        writer.close();
-        FileOutputStream fos = new FileOutputStream(file);
-	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-	int ind=0;
-        while(ind!=depends.getLen())
+        cond= new JLabel();
+        cond.setFont(cond.getFont().deriveFont(Font.BOLD,18));
+        cond.setForeground(new Color(0,184,0));
+        cond.setText(relatedcond.toString() );
+        if(!relatedcond)
         {
-            bw.write(depends.get(ind));
-            bw.newLine();
-            ind++;
+            cond.setForeground(Color.RED);
         }
-	bw.close();
-        
-        file= new File("src/Resources/Estadisticas/Referencias.txt");
-        writer = new PrintWriter(new FileWriter(file));
-        writer.print("");
-        writer.close();
-        fos = new FileOutputStream(file);
-	bw = new BufferedWriter(new OutputStreamWriter(fos));
-	ind=0;
-        while(ind!=refers.getLen())
-        {
-            bw.write(refers.get(ind));
-            bw.newLine();
-            ind++;
-        }
-	bw.close();
+        cond.setBounds(140,670,500,30);
+        this.add(cond);
+        cond.repaint();
     }
-    
+
 }

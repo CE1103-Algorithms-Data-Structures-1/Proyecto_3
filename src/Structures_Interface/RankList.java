@@ -2,10 +2,12 @@
 package Structures_Interface;
 
 import Statics.Rank;
+import javax.swing.DefaultListModel;
 
 /**
- *Clase encargada de instanciar listas enlazadas.
- * @author Daniel Camacho 
+ * Clase encargada de instanciar listas enlazadas.
+ *
+ * @author Daniel Camacho
  */
 public class RankList 
 {
@@ -20,8 +22,10 @@ public class RankList
         this.head=null;
         this.len=0;
     }
+
     /**
      * Metodo para anadir elementos a la lista. 
+     *
      * @param rnk valor del nuevo nodo.
      */
     public void add(Rank rnk)
@@ -42,8 +46,10 @@ public class RankList
        this.len++;
       }
     }
+
     /**
      * Metodo para saber si la lista esta vacia.
+     *
      * @return Booleano condicion.
      */
     public Boolean isEmpty()
@@ -54,6 +60,7 @@ public class RankList
         }
         return false;
     }
+
     /**
      * Metodo para imprimir toda la lista.
      */
@@ -63,11 +70,14 @@ public class RankList
         while(temp!=null)
         {
             System.out.println(temp.getValue().getName());
+            System.out.println("Dependencias: "+ temp.getValue().getDep());
+            System.out.println("Referencias: "+temp.getValue().getRef());
             System.out.println("Posicion: "+temp.getValue().getValue());
             temp=temp.getNext();
         }
         System.out.println(this.len);
     }
+
     /**
      * Metodo quer borra la lista actual.
      */
@@ -76,6 +86,7 @@ public class RankList
         this.head=null;
         this.len=0;
     }
+
     /**
      * Metodo para obtener un nodo en una posicion especifica.
      * @param pos Entero posicion
@@ -96,6 +107,7 @@ public class RankList
         }
         return null;
     }
+
     /**
      * Metodo para obtener el tamano de la lista en cuestion.
      * @return Entero longitud
@@ -104,128 +116,126 @@ public class RankList
     {
         return this.len;
     }
+
     /**
-     * Metodo para agregar un uevo eleemento en la posicion que le corresponde.
-     * @param rnk eleemento a insertar
+     * Metodo para ordenar las dependencias.
      */
-    public void addInorderDep(Rank rnk)
+    public RankList orderDep()
     {
-        RankNode temp= this.head;
-        Boolean found= false;
-        while(temp.getNext()!=null)
-        {
-            if(!found)
-            {
-                if(temp.getValue().getDep()<rnk.getDep())
-                {
-                    if(this.head==temp)
-                    {
-                        RankNode nuevo= new RankNode(rnk);
-                        this.head=nuevo;
-                        nuevo.setNext(temp);
-                        nuevo.getValue().chnRank(1);
-                        found=true;
-                        len++;
-                    }
-                }
-                else if(temp.getNext().getValue().getDep()<rnk.getDep())
-                {
-                    RankNode nuevo= new RankNode(rnk);
-                    nuevo.setNext(temp.getNext());
-                    temp.setNext(nuevo);
-                    nuevo.getValue().chnRank(temp.getValue().getValue()+1);
-                    temp=temp.getNext().getNext();
-                    found=true;
-                    len++;
-                }
-                else
-                {
-                    temp=temp.getNext();
-                }
-            }
-            else
-            {
-                if(temp.getNext().getNext()==null)
-                {
-                    temp.getValue().chnRank(temp.getValue().getValue()+1);
-                    temp.getNext().getValue().chnRank(temp.getValue().getValue()+1);
-                    temp=temp.getNext();
-                }
-                else
-                {
-                    temp.getValue().chnRank(temp.getValue().getValue()+1);
-                    temp=temp.getNext();
-                }
-            }
-        }
-        if(!found)
-        {
-            rnk.chnRank(temp.getValue().getValue()+1);
-            temp.setNext(new RankNode(rnk));
-            len++;
-            
-        }
+       RankList nueva= new RankList();
+       while(this.head!=null)
+       {
+           nueva.add(getBig("d"));
+       }
+       return nueva;
     }
+
     /**
      * Metodo para insertar un nuevo elemento por orden de referencias.
      * @param rnk 
      */
-    public void addInorderRef(Rank rnk)
+    public RankList orderRef()
     {
+       RankList nueva= new RankList();
+       while(this.head!=null)
+       {
+           nueva.add(getBig("r"));
+       }
+       return nueva;
+    }
+
+    public Rank getBig(String t)
+    {
+        int max=0;
         RankNode temp= this.head;
-        Boolean found= false;
-        while(temp.getNext()!=null)
+        while(temp!=null)
         {
-            if(!found)
+            if(t=="d")
             {
-                if(temp.getValue().getRef()<rnk.getRef())
+                if(temp.getValue().getDep()>max)
                 {
-                    if(this.head==temp)
-                    {
-                        RankNode nuevo= new RankNode(rnk);
-                        this.head=nuevo;
-                        nuevo.setNext(temp);
-                        nuevo.getValue().chnRank(1);
-                        found=true;
-                        len++;
-                    }
+                    max=temp.getValue().getDep();
                 }
-                else if(temp.getNext().getValue().getRef()<rnk.getRef())
+                
+            }
+            else if(t=="r")
+            {
+                if(temp.getValue().getRef()>max)
                 {
-                    RankNode nuevo= new RankNode(rnk);
-                    nuevo.setNext(temp.getNext());
-                    temp.setNext(nuevo);
-                    nuevo.getValue().chnRank(temp.getValue().getValue()+1);
-                    temp=temp.getNext().getNext();
-                    found=true;
-                    len++;
-                }
-                else
-                {
-                    temp=temp.getNext();
+                    max=temp.getValue().getRef();
                 }
             }
-            else
-            {
-                if(temp.getNext().getNext()==null)
-                {
-                    temp.getValue().chnRank(temp.getValue().getValue()+1);
-                    temp.getNext().getValue().chnRank(temp.getValue().getValue()+1);
-                    temp=temp.getNext();
-                }
-                else
-                {
-                    temp.getValue().chnRank(temp.getValue().getValue()+1);
-                    temp=temp.getNext();
-                }
-            }
+            temp=temp.getNext();
         }
-        if(!found)
+        temp= this.head;
+        Rank found=null;
+        while(temp!=null)
         {
-            rnk.chnRank(temp.getValue().getValue()+1);
-            temp.setNext(new RankNode(rnk));
-            len++;
+            if(t=="d")
+            {
+                if(this.head.getValue().getDep()==max)
+                {
+                    found=this.head.getValue();
+                    this.head=head.getNext();
+                    return found;
+                }
+                else if(temp.getNext().getValue().getDep()==max)
+                {
+                    found=temp.getNext().getValue();
+                    temp.setNext(temp.getNext().getNext());
+                    return found;
+                }
+            }
+            else if(t=="r")
+            {
+                if(this.head.getValue().getRef()==max)
+                {
+                    found=this.head.getValue();
+                    this.head=head.getNext();
+                    return found;
+                }
+                else if(temp.getNext().getValue().getRef()==max)
+                {
+                    found=temp.getNext().getValue();
+                    temp.setNext(temp.getNext().getNext());
+                    return found;
+                } 
+            }
+            temp=temp.getNext();
             
         }
+        return found;
     }
+
+    public DefaultListModel toList(String t)
+    {
+       DefaultListModel l= new DefaultListModel();
+       RankNode temp= this.head;
+       while(temp!=null)
+       {
+           if(t=="d")
+           {
+                l.addElement(temp.getValue().getPosition()+"."+" "+temp.getValue().getName()+": "+temp.getValue().getDep());
+           }
+           else if(t=="r")
+           {
+               l.addElement(temp.getValue().getPosition()+"."+" "+temp.getValue().getName()+": "+temp.getValue().getRef());
+           }
+           temp=temp.getNext();
+       }
+       return l;
+    }
+
+    public void assignPosition()
+    {
+        int p=1;
+        RankNode temp= this.head;
+        while(temp!=null)
+        {
+            temp.getValue().setPosition(p);
+            p++;
+            temp=temp.getNext();
+        }
+    }
+    
 }

@@ -8,8 +8,6 @@ package Main;
 
 import Ventanas.Gestor;
 import java.io.IOException;
-
-import Ventanas.Gestor;
 import org.apache.bcel.classfile.ClassFormatException;
 
 /**
@@ -20,6 +18,8 @@ public class Main
 {
 
     /**
+     * Entrada al ejecutar el programa.
+     *
      * @param args the command line arguments
      * @throws java.io.IOException
      * @throws java.lang.ClassNotFoundException
@@ -27,8 +27,7 @@ public class Main
     public static void main(String[] args) throws IOException, ClassFormatException, ClassNotFoundException 
     {
         Gestor gestor = new Gestor();
-        gestor.showMain();
-
+        gestor.showMainS();
     }
     
 }

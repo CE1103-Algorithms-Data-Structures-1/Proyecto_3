@@ -49,11 +49,8 @@ public class ObjectClass {
         for (Attribute at1 : at) {
             atributes.add(at1.toString());
         }
-        
-        
-        
-        
     }
+
     /**
      * Añade una LinkedList al atributo listofDep 
      * @param l LinkedList a añadir
@@ -63,7 +60,11 @@ public class ObjectClass {
             
             this.listofDep = l;
         }
-        
+    }
+
+    public LinkedList getListOfDep()
+    {
+        return this.listofDep;
     }
     
     /**
@@ -73,6 +74,7 @@ public class ObjectClass {
     public JavaClass getValClass(){
         return this.valClass;
     }
+
     /**
      * Retorna el nombre de la clase que almacena
      * @return String con el nombre
@@ -80,6 +82,7 @@ public class ObjectClass {
     public String getName() {
         return name;
     }
+
     /**
      * Retorna una lista enlazada con los vertices a los que referencia la clase
      * @return 
@@ -87,6 +90,7 @@ public class ObjectClass {
     public LinkedList getListOfRef(){
         return this.listofRef;
     }
+
     /**
      * Retorna el arrayList con los metodos de la clase 
      * @return arraylist con los metodos de la clase
@@ -94,6 +98,7 @@ public class ObjectClass {
     public ArrayList getMethods(){
         return this.methods;
     }
+
     /**
      * Retorna el arrayList con los atributos de la clase 
      * @return arraylist con los atributos de la clase
@@ -101,6 +106,7 @@ public class ObjectClass {
     public ArrayList getAtributes(){
         return this.atributes;
     }
+
     /**
      * Conecta el nodo con otro
      * @param n nodo a conectar
@@ -108,6 +114,7 @@ public class ObjectClass {
     public void setNext(ObjectClass n){
         this.next = n;
     }
+
     /**
      * Obtiene el nodo que le sigue a este
      * @return atributo next
@@ -120,6 +127,7 @@ public class ObjectClass {
      * un "@"
      * @return String con todos los nombres 
      */
+
     public String getMethodsToString(){
         String result = "";
         for(int i = 0 ; i < this.methods.size() ;i++){
@@ -127,6 +135,7 @@ public class ObjectClass {
         }
         return result;
     } 
+
     /**
      * Retorna un String con todos los nombres de atributos de la clase ]
      * los nombres separados  con "@"

@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Ventanas;
 
 import Grafico.Clase;
 import Structures_Interface.ClassList;
 import Structures_Logic.Graph;
-import Structures_Logic.LinkedClass;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.bcel.classfile.ClassFormatException;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Ventana principal de la aplicacion.
@@ -48,7 +45,11 @@ public class MainWindow extends JFrame
     private JList mainList;
     private JScrollPane scrollPane;
     private Graph grafo;
-    
+    private Graph Subgrafo;
+    private JButton Generate;
+    private ClassList lista;
+    private JButton Stats;
+
     public MainWindow(String title,Image icono,Gestor gestor)
     {
         this.title=title;
@@ -80,8 +81,17 @@ public class MainWindow extends JFrame
         this.missingList= new DefaultListModel();
         this.Complete= new JButton("Complete using Maven™");
         this.mainPanel= new JLayeredPane();
+        this.Generate= new JButton("Generate!");
+        this.Stats= new JButton("JAR Statistics");
+        this.Subgrafo=new Graph();
+        try {
+            FileUtils.cleanDirectory(new File("src/Resources/JAR/"));
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Init();   
     }
+
     /**
      * Metodo encargado de inicializar los componentes de la ventana.
      */
@@ -165,6 +175,8 @@ public class MainWindow extends JFrame
                 try 
                 {
                     grafo.init(lastFile.toString(),lastFile.getName());
+                    lista= grafo.getListClass().ConvertToClassList();
+                    gestor.generateDisplay();
                 } catch (IOException ex) 
                 {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -179,64 +191,50 @@ public class MainWindow extends JFrame
                 
                 System.out.println(lastFile.getName());
                 System.out.println(lastFile);
+               Generate.setBackground(new Color(235,60,1));
+               Generate.setEnabled(true);
+               Stats.setEnabled(true);
+               Stats.setBackground(new Color(0,184,0));
 
             }
         });
         Panel1.add(Add);
         
-        JButton Stats= new JButton("JAR Statistics");
-        Stats.setBackground(new Color(0,184,0));
+        
+        Stats.setBackground(Color.DARK_GRAY);
         Stats.setFont(Stats.getFont().deriveFont(Font.BOLD,28));
         Stats.setForeground(Color.BLACK);
         Stats.setBounds(0,165+65,300,65);
         Stats.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
         Stats.setFocusPainted(false);
+        Stats.setEnabled(false);
         Stats.addActionListener(e->{
             dispose();
-            gestor.showStatics();
+            gestor.showStatics(lista,true);
         });
         Panel1.add(Stats);
         
-        JButton Generate= new JButton("Generate!");
+        
         Generate.setBackground(Color.DARK_GRAY);
         Generate.setFont(Generate.getFont().deriveFont(Font.BOLD,28));
         Generate.setForeground(Color.BLACK);
         Generate.setBounds(0,360,300,65);
         Generate.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
         Generate.setFocusPainted(false);
-        Generate.setEnabled(true);
+        Generate.setEnabled(false);
         Generate.addActionListener(e->{
                 Generate.setBackground(new Color(235,60,1));
                 Generate.setForeground(Color.BLACK);
                 Generate.setText("Generating...");
-                
-                ClassList a=new ClassList();
-                
-                a.Add(new Clase(null,null,"Prueba 3",10,600,10,10));
-                a.Add(new Clase(null,null,"Prueba 3",10,600,10,10));
-                
-                ClassList b=new ClassList();
-                
-                b.Add(new Clase(null,null,"Prueba 3",100,150,300,30));
-                b.Add(new Clase(null,null,"Prueba 3",500,550,300,230));
-                
-                ClassList c=new ClassList();
-                
-                c.Add(new Clase(null,null,"Prueba 3",400,250,10,10));
-                c.Add(new Clase(null,null,"Prueba 3",100,150,10,10));
-                
-                ClassList d=new ClassList();
-                
-                d.Add(new Clase(null,null,"Prueba 3",400,250,300,230));
-                d.Add(new Clase(null,null,"Prueba 3",500,550,300,230));
-                
-                ClassList lista= new ClassList();
-                
-                lista.Add(new Clase(a,b,"Prueba 1",400,200,10,10));
-                lista.Add(new Clase(c,d,"Prueba 2",100,100,10,10));
-                lista.Add(new Clase(d,c,"Prueba 2",500,500,10,10));
-                gestor.Generate(lista);
                 Generate.setEnabled(false);
+                
+                lista.printDepsCoords();
+                assignCoords(lista);
+                lista.printDepsCoords();
+                gestor.Generate(lista);
+                
+                
+            
             
         });
         Panel1.add(Generate);
@@ -354,12 +352,15 @@ public class MainWindow extends JFrame
                 mainList.setModel(missingList);
                 
             
-        });
-        
-    
-        
-        
+        });  
     }
+    
+    public void goingBack()
+    {
+        this.Generate.setEnabled(true);
+        this.Generate.setText("Generate!");
+    }
+
     /**
      * Metodo para actualizar la pantalla.
      */
@@ -394,6 +395,7 @@ public class MainWindow extends JFrame
         jarTab.setText("Jars");
         jarTab.setFocusPainted(false);
         jarTab.setForeground(Color.BLACK);
+        jarTab.setEnabled(true);
        
         this.mainPanel.add(allTab,2,0);
         allTab.setBounds(915,620,85,26);
@@ -402,6 +404,7 @@ public class MainWindow extends JFrame
         allTab.setText("All Files");
         allTab.setFocusPainted(false);
         allTab.setForeground(Color.BLACK);
+        allTab.setEnabled(true);
         
         this.mainPanel.add(missingTab,2,0);
         missingTab.setBounds(625,620,135,26);
@@ -417,7 +420,33 @@ public class MainWindow extends JFrame
         mainList.setForeground(Color.WHITE);
         mainList.setBounds(0,0,1000,646);
         
-        //Complete.setBackground(new Color(84,19,136));
+        mainList.addMouseListener(new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent evt) 
+            {
+                JList list = (JList)evt.getSource();
+                if (evt.getClickCount() == 2) 
+                {
+                    int index = list.locationToIndex(evt.getPoint());
+                    String s= list.getModel().getElementAt(index).toString();
+                    if(s.endsWith(".jar"))
+                    {
+                        try {
+                            Subgrafo=grafo.makeSubGraph(s);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassFormatException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        lastFile=Subgrafo.getLastFile();
+                        setSubgraph();
+                        
+                    }
+                } 
+            }
+        });
         
         classList.addElement(" -----------------------------------------------------------------Classes----------------------------------------------------------------");
         setList(grafo.getALLclases(),classList,"classes");
@@ -438,6 +467,7 @@ public class MainWindow extends JFrame
         mainList.setModel(classList);
         
     }
+
     /**
      * Metodo para inicializar las listas 
      * @param lista Lista de elementos
@@ -473,6 +503,10 @@ public class MainWindow extends JFrame
             }
         }
     }
+
+    /**
+     * Metodo para dejar todas las listas en blanco.
+     */
     public void clean()
     {
         classList.clear();
@@ -480,5 +514,199 @@ public class MainWindow extends JFrame
         missingList.clear();
         allFileList.clear();
     }
-  
+
+    /**
+     * Metodo para asignar las coordenadas en el canvas de cada una de las clases.
+     * @param listaP ClassList de clases
+     */
+    public void assignCoords(ClassList listaP)
+    {
+        int x=10;
+        int y=350;
+        int x0=10;
+        int y0=50;
+        int ind=0;
+        int bigstx=0;
+        Boolean inicial=true;
+        while(listaP.Get(ind)!=null)
+        {
+            Clase actual=listaP.Get(ind);
+            actual.assignCoords(x, y);
+            if(inicial)
+            {
+                bigstx=actual.getXRcoord();
+                x=50+bigstx;
+                y=y0;
+                inicial=!inicial;
+                
+            }
+            else
+            {
+               if(actual.getY()+30>595)
+               {
+                   if(x+actual.getXRcoord()>1195)
+                   {
+                       x=x0;
+                       y=y0;
+                       actual.assignCoords(x, y);
+                      
+                   }
+                   else
+                   {
+                        y=y0;
+                        x=x+bigstx+50;
+                        actual.assignCoords(x, y);
+                        bigstx=actual.getXRcoord();
+                   }
+               }
+               if(actual.getXRcoord()>bigstx)
+                {
+                    bigstx=actual.getXRcoord();
+                }
+               y+=100;
+            }
+            ind++;
+            
+        }
+        ind=0;
+        while(listaP.Get(ind)!=null)
+        {
+            Clase actual=listaP.Get(ind);
+            int ind2=0;
+            while(actual.getDeps().Get(ind2)!=null)
+            {
+                Clase depActual=actual.getDeps().Get(ind2);
+                if(listaP.inList(depActual.getName()))
+                {
+                    depActual.assignCoords(listaP.getCoordByName(depActual.getName(),"x"),listaP.getCoordByName(depActual.getName(),"y"));
+                }
+                ind2++;
+            }
+            ind++;
+        }
+        ind=0;
+        while(listaP.Get(ind)!=null)
+        {
+            Clase actual=listaP.Get(ind);
+            int ind2=0;
+            while(actual.getRefs().Get(ind2)!=null)
+            {
+                Clase refActual=actual.getRefs().Get(ind2);
+                if(listaP.inList(refActual.getName()))
+                {
+                    refActual.assignCoords(listaP.getCoordByName(refActual.getName(),"x"),listaP.getCoordByName(refActual.getName(),"y"));
+                }
+                ind2++;
+            }
+            ind++;
+        }
+    }
+    public void setSubgraph()
+    {
+        this.clean();
+        clean();
+        statusBar.setLayout(null);
+        statusBar.add(Status);
+        statusBar.add(Completeness);
+        
+        fileName.setText(lastFile.getName()+"/Classes");
+        fileName.setBounds(0,0,800,28);
+        
+        Completeness.setBounds(880,0,147,28);
+        Completeness.setText("UNKNOWN");
+        
+        Status.setBounds(800,0,53,28);
+        Status.setText("Status: ");
+        
+        this.mainPanel.add(classTab,2,0);
+        classTab.setBounds(755,620,85,26);
+        classTab.setBackground(new Color(235,60,1));
+        classTab.setBorder(BorderFactory.createMatteBorder(2,2,2,2,borderColor));
+        classTab.setText("Classes");
+        classTab.setFocusPainted(false);
+        classTab.setForeground(Color.BLACK);
+        
+        this.mainPanel.add(jarTab,2,0);
+        jarTab.setBounds(835,620,85,26);
+        jarTab.setBackground(new Color(0,184,0));
+        jarTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        jarTab.setText("Jars");
+        jarTab.setFocusPainted(false);
+        jarTab.setForeground(Color.BLACK);
+        jarTab.setEnabled(true);
+       
+        this.mainPanel.add(allTab,2,0);
+        allTab.setBounds(915,620,85,26);
+        allTab.setBackground(new Color(0,184,0));
+        allTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        allTab.setText("All Files");
+        allTab.setFocusPainted(false);
+        allTab.setForeground(Color.BLACK);
+        allTab.setEnabled(true);
+        
+        this.mainPanel.add(missingTab,2,0);
+        missingTab.setBounds(625,620,135,26);
+        missingTab.setBackground(new Color(0,184,0));
+        missingTab.setBorder(BorderFactory.createMatteBorder(2,2,0,2,borderColor));
+        missingTab.setText("Missing Dependencies");
+        missingTab.setFocusPainted(false);
+        
+        missingTab.setForeground(Color.BLACK);
+        
+        mainList.setBackground(backColor);
+        mainList.setFont(mainList.getFont().deriveFont(Font.PLAIN,20));
+        mainList.setForeground(Color.WHITE);
+        mainList.setBounds(0,0,1000,646);
+        
+        mainList.addMouseListener(new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent evt) 
+            {
+                JList list = (JList)evt.getSource();
+                if (evt.getClickCount() == 2) 
+                {
+                    int index = list.locationToIndex(evt.getPoint());
+                    String s= list.getModel().getElementAt(index).toString();
+                    if(s.endsWith(".jar"))
+                    {
+                        try {
+                            Subgrafo=grafo.makeSubGraph(s);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassFormatException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        lastFile=Subgrafo.getLastFile();
+                        setSubgraph();
+                        
+                    }
+                } 
+            }
+        });
+        classList.addElement(" -----------------------------------------------------------------Classes----------------------------------------------------------------");
+        setList(Subgrafo.getALLclases(),classList,"classes");
+        
+        jarList.addElement(" -----------------------------------------------------------------Jars--------------------------------------------------------------------");
+        setList(Subgrafo.getAllJars(),jarList,"jar");
+        
+        allFileList.addElement(" ----------------------------------------------------------------All Files-----------------------------------------------------------------");
+        allFileList.addElement(" >>>CLASSES");
+        setList(Subgrafo.getALLclases(),allFileList,"all");
+        allFileList.addElement(" >>>JARS");
+        setList(Subgrafo.getAllJars(),allFileList,"all");
+
+        
+        missingList.addElement(" --------------------------------------------------------Missing Dependencies-------------------------------------------------------");
+        setList("",missingList,"miss");
+        
+        mainList.setModel(classList);
+        
+        jarTab.setEnabled(true);
+        allTab.setEnabled(true);
+        
+        lista= Subgrafo.getListClass().ConvertToClassList();
+    }
+
 }

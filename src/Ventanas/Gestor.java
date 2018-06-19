@@ -24,34 +24,44 @@ public class Gestor
     public Gestor()
     {
         this.title="JAR Analyzer";
-        this.icon=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/jar.png"));
+        this.icon=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader()
+                .getResource("Resources/Icons/jar.png"));
         this.main= new MainWindow(title,icon,this);
-        this.statics= new Statics(title,icon,this);
+        this.statics= new Statics(title,icon,this,false);
         this.display= new Display(title,icon,this);
     }
-    public void showMain()
+
+    public void showMainS()
     {
         this.main.setVisible(true);
     }
-    public void showStatics()
+
+    public void showMain()
     {
-        try 
-        {
-            this.statics.refresh();
-            this.statics.generate();
-        } catch (Exception e) 
-        {
-            e.printStackTrace();
-        }
+        this.main.setVisible(true);
+        this.main.goingBack();
+    }
+    public void showStatics(ClassList c,Boolean r)
+    {
+        this.statics.refresh();
+        this.statics.generate(c,r);
         this.statics.setVisible(true);
     }
+
     public void showDisplay()
     {
         this.display.setVisible(true);
     }
+
     public void Generate(ClassList lista)
     {
+        this.display= new Display(title,icon,this);
+        main.dispose();
         this.showDisplay();
         this.display.Generate(lista);
+    }
+    public void generateDisplay()
+    {
+        this.display= new Display(title,icon,this);
     }
 }

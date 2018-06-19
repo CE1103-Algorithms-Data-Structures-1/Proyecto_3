@@ -8,13 +8,14 @@ package Structures_Interface;
 import Statics.Rank;
 
 /**
- *Clase que instancia objetos nodo;
+ * Clase que instancia objetos nodo;
  * @author Daniel Camacho 
  */
 public class RankNode
 {
     private Rank value;
     private RankNode next;
+
     /**
      * Contructor de la clase Node.
      * @param val Objeto estadistica..
@@ -24,6 +25,7 @@ public class RankNode
         this.value=val;
         this.next=null;
     }
+
     /**
      * Metodo para obtener el siguiente nodo.
      * @return Nodo siguiente.
@@ -32,6 +34,7 @@ public class RankNode
     {
         return this.next;
     }
+
     /**
      * Metodo para establecer el valor del siguiente nodo.
      * @param nex Nodo siguiente.
@@ -40,6 +43,7 @@ public class RankNode
     {
         this.next=nex;
     }
+
     /**
      * Metodo para obtener el valor almacenado en el nodo.
      * @return Rank valor.
