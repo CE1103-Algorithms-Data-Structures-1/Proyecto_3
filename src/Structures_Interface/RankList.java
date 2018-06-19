@@ -5,8 +5,9 @@ import Statics.Rank;
 import javax.swing.DefaultListModel;
 
 /**
- *Clase encargada de instanciar listas enlazadas.
- * @author Daniel Camacho 
+ * Clase encargada de instanciar listas enlazadas.
+ *
+ * @author Daniel Camacho
  */
 public class RankList 
 {
@@ -21,8 +22,10 @@ public class RankList
         this.head=null;
         this.len=0;
     }
+
     /**
      * Metodo para anadir elementos a la lista. 
+     *
      * @param rnk valor del nuevo nodo.
      */
     public void add(Rank rnk)
@@ -43,8 +46,10 @@ public class RankList
        this.len++;
       }
     }
+
     /**
      * Metodo para saber si la lista esta vacia.
+     *
      * @return Booleano condicion.
      */
     public Boolean isEmpty()
@@ -55,6 +60,7 @@ public class RankList
         }
         return false;
     }
+
     /**
      * Metodo para imprimir toda la lista.
      */
@@ -71,6 +77,7 @@ public class RankList
         }
         System.out.println(this.len);
     }
+
     /**
      * Metodo quer borra la lista actual.
      */
@@ -79,6 +86,7 @@ public class RankList
         this.head=null;
         this.len=0;
     }
+
     /**
      * Metodo para obtener un nodo en una posicion especifica.
      * @param pos Entero posicion
@@ -99,6 +107,7 @@ public class RankList
         }
         return null;
     }
+
     /**
      * Metodo para obtener el tamano de la lista en cuestion.
      * @return Entero longitud
@@ -107,6 +116,7 @@ public class RankList
     {
         return this.len;
     }
+
     /**
      * Metodo para ordenar las dependencias.
      */
@@ -119,6 +129,7 @@ public class RankList
        }
        return nueva;
     }
+
     /**
      * Metodo para insertar un nuevo elemento por orden de referencias.
      * @param rnk 
@@ -132,6 +143,7 @@ public class RankList
        }
        return nueva;
     }
+
     public Rank getBig(String t)
     {
         int max=0;
@@ -194,6 +206,7 @@ public class RankList
         }
         return found;
     }
+
     public DefaultListModel toList(String t)
     {
        DefaultListModel l= new DefaultListModel();
@@ -212,6 +225,7 @@ public class RankList
        }
        return l;
     }
+
     public void assignPosition()
     {
         int p=1;

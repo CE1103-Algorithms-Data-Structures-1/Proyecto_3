@@ -24,15 +24,18 @@ public class Gestor
     public Gestor()
     {
         this.title="JAR Analyzer";
-        this.icon=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("Resources/Icons/jar.png"));
+        this.icon=Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader()
+                .getResource("Resources/Icons/jar.png"));
         this.main= new MainWindow(title,icon,this);
         this.statics= new Statics(title,icon,this,false);
         this.display= new Display(title,icon,this);
     }
+
     public void showMainS()
     {
         this.main.setVisible(true);
     }
+
     public void showMain()
     {
         this.main.setVisible(true);
@@ -44,10 +47,12 @@ public class Gestor
         this.statics.generate(c,r);
         this.statics.setVisible(true);
     }
+
     public void showDisplay()
     {
         this.display.setVisible(true);
     }
+
     public void Generate(ClassList lista)
     {
         this.display= new Display(title,icon,this);

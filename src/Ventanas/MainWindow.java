@@ -1,19 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Ventanas;
 
 import Grafico.Clase;
 import Structures_Interface.ClassList;
 import Structures_Logic.Graph;
-import Structures_Logic.LinkedClass;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -56,6 +49,7 @@ public class MainWindow extends JFrame
     private JButton Generate;
     private ClassList lista;
     private JButton Stats;
+
     public MainWindow(String title,Image icono,Gestor gestor)
     {
         this.title=title;
@@ -97,6 +91,7 @@ public class MainWindow extends JFrame
         }
         Init();   
     }
+
     /**
      * Metodo encargado de inicializar los componentes de la ventana.
      */
@@ -365,6 +360,7 @@ public class MainWindow extends JFrame
         this.Generate.setEnabled(true);
         this.Generate.setText("Generate!");
     }
+
     /**
      * Metodo para actualizar la pantalla.
      */
@@ -471,6 +467,7 @@ public class MainWindow extends JFrame
         mainList.setModel(classList);
         
     }
+
     /**
      * Metodo para inicializar las listas 
      * @param lista Lista de elementos
@@ -506,6 +503,7 @@ public class MainWindow extends JFrame
             }
         }
     }
+
     /**
      * Metodo para dejar todas las listas en blanco.
      */
@@ -516,6 +514,7 @@ public class MainWindow extends JFrame
         missingList.clear();
         allFileList.clear();
     }
+
     /**
      * Metodo para asignar las coordenadas en el canvas de cada una de las clases.
      * @param listaP ClassList de clases
@@ -709,6 +708,5 @@ public class MainWindow extends JFrame
         
         lista= Subgrafo.getListClass().ConvertToClassList();
     }
-    
-    
+
 }

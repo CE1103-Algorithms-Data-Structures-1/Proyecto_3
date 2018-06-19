@@ -9,7 +9,8 @@ import Grafico.Clase;
 import Statics.Rank;
 
 /**
- *Lista enlazada simple 
+ * Lista enlazada simple
+ *
  * @author Daniel Camacho
  */
 public class ClassList 
@@ -22,6 +23,7 @@ public class ClassList
         this.Head=null;
         this.len=0;
     }
+
     /**
      * Metodo encargado de anadir elementos a la lista.
      */
@@ -43,6 +45,7 @@ public class ClassList
             len++;
         }
     }
+
     /**
      * Metodo para saber si la lista esta vacia;
      * @return Valor booleano
@@ -55,6 +58,7 @@ public class ClassList
        }
        return false;
     }
+
     /**
      * Metodo para vaciar la lista.
      */
@@ -63,6 +67,7 @@ public class ClassList
         this.Head=null;
         this.len=0;
     }
+
     /**
      * Metodo para visualizar la clase en consola.
      */
@@ -74,7 +79,9 @@ public class ClassList
             System.out.println(temp.getValue().getName());
             temp=temp.getNext();
         }
-    }/**
+    }
+
+    /**
      * Metodo para obtener la longitud de la lista.
      * @return int Longitud
      */
@@ -82,6 +89,7 @@ public class ClassList
     {
         return this.len;
     }
+
     /**
      * Metodo para obtener un elemento de la lista en una posicion en especifico de la lista.
      * @param ind
@@ -102,6 +110,7 @@ public class ClassList
         }
         return temp.getValue();
     }
+
     /**
      * Metodo para saber si un elemento con un nombre en especifico está en la lista.
      * @param name String nombre
@@ -120,6 +129,7 @@ public class ClassList
         }
         return false;
     }
+
     /**
      * Metodo para obtener coordenadas por nombre de clase.
      * @param name String nombre de la clase.
@@ -155,6 +165,7 @@ public class ClassList
         }
         return 0;
     }
+
     public void printDepsCoords()
     {
         ClassNode temp= this.Head;
@@ -179,6 +190,7 @@ public class ClassList
             System.out.println("-------------------------------------------------------");
         }
     }
+
     public RankList ConvertToRankList()
     {
          RankList rank= new RankList();

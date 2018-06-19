@@ -31,6 +31,7 @@ public class Display extends JFrame
       this.back= new Color(75,81,93);
       this.Init();
   }
+
   /**
    * Metodo para inicializar la interfaz del Display 
    */
@@ -91,6 +92,7 @@ public class Display extends JFrame
     
     
   }
+
   /**
    * Metodo encargado de dibujar las clases en pantalla.
    */

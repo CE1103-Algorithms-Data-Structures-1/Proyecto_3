@@ -11,7 +11,8 @@ import Structures_Interface.ClassList;
 
 
 /**
- * Clase Linked List para almacenamiento de datos
+ * Linked List para almacenamiento de datos
+ *
  * @author dgarcia
  */
 public class LinkedList {
@@ -19,6 +20,7 @@ public class LinkedList {
     private int size; // largo de la lista
     private Node head,tail; // cabeza de la lista
     private int saliente;
+
     /**
      * Constructor de la clase 
      */
@@ -27,14 +29,17 @@ public class LinkedList {
         this.head = this.tail = null; // iniciando la cabeza en nulo
         this.saliente = 0;
     }
+
     public void setSaliente(int s)
     {
         this.saliente=s;
     }
+
     public int getSaliente()
     {
         return this.saliente;
     }
+
     /**
      * Retorna la cabeza de la lista enlazada
      * @return 
@@ -42,6 +47,7 @@ public class LinkedList {
     public Node getHead(){
         return this.head;
     }
+
     /**
      * Retorna true si la lista esta vacia en otro caso false
      * @return valor booleano
@@ -57,6 +63,7 @@ public class LinkedList {
     public int getSize(){
         return this.size;
     }
+
     /**
      * Añade un nuevo Nodo a la lista con un vertice dentro
      * @param v vertice a añadir a la lista
@@ -75,6 +82,7 @@ public class LinkedList {
         }
        this.size++;
     }
+
     public Vertex findVertex(String ver){
         if(this.isEmpty()){
             return null;
@@ -89,8 +97,9 @@ public class LinkedList {
         }
         return null;
     }
+
     /**
-     * 
+     * Imprime contenido de la lista
      */
     public void showList(){
        if(isEmpty()){
@@ -105,6 +114,7 @@ public class LinkedList {
            System.out.println("");
        }
     }
+
     /**
      * Metodo para convertir una LinkedList en ClassList
      * @return 

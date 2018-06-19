@@ -10,6 +10,7 @@ import Structures_Interface.ClassList;
 import org.apache.bcel.classfile.JavaClass;
 
 /**
+ * Lista enlazada simple, con doble referencia de entrada
  *
  * @author dgarcia
  */
@@ -25,6 +26,7 @@ public class LinkedClass {
         this.size = 0;
         this.head = this.tail = null;
     }
+
     /**
      * Retorna el valor del atributo size
      * @return atributo size
@@ -32,6 +34,7 @@ public class LinkedClass {
     public int getSize(){
         return this.size;
     }
+
     /**
      * Retorna la cabeza de la lista enlazada
      * @return atributo head de la lista
@@ -39,8 +42,7 @@ public class LinkedClass {
     public ObjectClass getHead(){
         return this.head;
     }
-    
-    
+
     /**
      * Retorna true si la lista esta vacia si no false
      * @return valor booleano a retornar
@@ -65,7 +67,7 @@ public class LinkedClass {
      * Añade un nuevo Nodo a la lista con un vertice dentro
      * @param na nombre de la clase a agregar
      * @param c clase a añadir a la lista
-     * @param  l lista de vertices
+     * @param l lista de vertices
      */
     public void add(String na , JavaClass c ,LinkedList l){
         
@@ -82,6 +84,7 @@ public class LinkedClass {
         }
        this.size++;
     }    
+
     /**
      * Metodo para convertir de lista logica a lista grafica.
      * @return 
@@ -97,6 +100,5 @@ public class LinkedClass {
             temp=temp.getNext();
         }
         return converted;
-    }    
-
+    }
 }
