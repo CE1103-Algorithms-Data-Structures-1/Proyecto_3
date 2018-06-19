@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Structures_Logic;
 
 import java.io.BufferedInputStream;
@@ -18,11 +13,10 @@ import java.util.zip.ZipInputStream;
 import org.apache.bcel.classfile.ClassFormatException;
 
 /**
- * Clase Graph es la clase en donde se agregan los vertices para
- * la creacion del grafo
+ * Crea la estructura grafo y administra la creación de vertices
+ *
  * @author dgarcia
  */
-
 public class Graph {
     
     private int size; //numero de vertices en el grafo
@@ -31,6 +25,7 @@ public class Graph {
     private final List jars; //lista de jars
     private final List clases; // lista de clases
     private ZipFile zipFile; // archivo del que sse sacan los jars y clases
+
     /**
      * Constructor de la clase Graph
      */
@@ -43,8 +38,9 @@ public class Graph {
         clases =  new ArrayList<>();
         this.zipFile = null;
     }
+
     /**
-     * Inicializa el grafo utilizando un archivo de extencion jar
+     * Inicializa el grafo utilizando un archivo de extencion .jar
      *
      * @param path, ruta del archivo
      * @param name, id del vertice a agregar
@@ -96,6 +92,7 @@ public class Graph {
         System.out.println("");
         this.showGraph();        
     }
+
     /**
      * Da valor al atributo graphListOfClass añadiendole una nueva lista 
      * @param l LinkedClass a añadir al parametro
@@ -103,6 +100,7 @@ public class Graph {
     public void setListClass(LinkedClass l){
         this.graphListOfClass = l;
     }
+
     /**
      * Metodo para obtener la lista de clases del grafo.
      * @return 
@@ -111,6 +109,7 @@ public class Graph {
     {
         return this.graphListOfClass;
     }
+
     /**
      * Insert con un parametro agrega el verticeinicial
      * @param name 
@@ -119,6 +118,7 @@ public class Graph {
     public void insert(String name){
         insert(name,"");
     }
+
     /**
      * INSERT
      * metodo que inserta un nuevo vertices al grafo
@@ -129,6 +129,7 @@ public class Graph {
     public void insert(String name , String ref){
         this.add(name , ref );
     }
+
     /**
      * Metodo que agrega el vertice a la lista de vertices , pero estos nodos ya
      * tienen la lista de referencias hecha y esto para luego poder relacionar 
@@ -141,12 +142,14 @@ public class Graph {
         this.lisfOFVertex.add(v);
         
     }
+
     /**
      * Imprime los nodos del grafo y sus referencias
      */
     public void showGraph(){
         this.see();
     }
+
     /**
      * Retorna la lista enlazada de vertices del grafo
      * @return atributo listOFVertex
@@ -154,6 +157,7 @@ public class Graph {
     public LinkedList getListOFVertex(){
         return this.lisfOFVertex;
     }
+
     /**
      * Retorna el nombre del vertice con el mayor numero de referencias
      * @return 
@@ -178,6 +182,7 @@ public class Graph {
         
         return r;
     }
+
     /**
      * 
      * Obtiene todos los nombres de los jars que se encuentren dentro del actual
@@ -192,6 +197,7 @@ public class Graph {
         }
         return result;
     }
+
     /**
      * Obtiene todos los nombres de las clases que se encuentren dentro del jar
      * actual
@@ -236,6 +242,7 @@ public class Graph {
 //        
 //        return r;
 //    }
+
     /**
      * Retorna un string separado con "@" con todos los nombres de los jars junto
      * con todos los nombre de las clases dentro de ellos
@@ -352,7 +359,8 @@ public class Graph {
     
     /**
      * Crea una LinkedList de vertices que contienen los nombres de las clases
-     * que poseen este vertice en su lista de referencia 
+     * que poseen este vertice en su lista de referencia.
+     *
      * @param id nombre del vertice a buscar en las listas de las demmás clases
      * @return Lista enlazada
      */

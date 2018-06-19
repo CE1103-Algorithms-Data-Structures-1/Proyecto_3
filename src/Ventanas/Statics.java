@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Ventanas;
 
-import Statics.Rank;
 import Structures_Interface.ClassList;
 import Structures_Interface.RankList;
 import java.awt.*;
 import java.io.*;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -32,6 +23,7 @@ public class Statics extends JFrame
     private RankList refers;
     private DefaultListModel dep;
     private DefaultListModel ref;
+
     public Statics(String title, Image icon, Gestor gestor)
     {
         this.icon= icon;
@@ -47,6 +39,7 @@ public class Statics extends JFrame
         this.refers= new RankList();
         this.Init();
     }
+
     /**
      * Metodo que inicializa las caracteristicas de la ventana.
      */
@@ -134,6 +127,7 @@ public class Statics extends JFrame
         
         
     }
+
     /**
      * Metodo para generar las listas de ranking.
      * @throws FileNotFoundException 
@@ -152,13 +146,11 @@ public class Statics extends JFrame
        ref=rankr.toList("r");
        depList.setModel(dep);
        refList.setModel(ref);
-       
-        
-        
    }
-    /**
-     * Metodo para reiniciar los datos de las listas de estadistica. 
-     */
+
+   /**
+    * Metodo para reiniciar los datos de las listas de estadistica.
+    */
     public void refresh()
     {
         dep.removeAllElements();
@@ -166,6 +158,4 @@ public class Statics extends JFrame
         depends.clear();
         refers.clear();
     }
-    
-    
 }

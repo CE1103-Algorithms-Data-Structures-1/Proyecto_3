@@ -1,8 +1,8 @@
-
 package Statics;
 
 /**
- *Clase encargada de instanciar el objeto estadistica para cada archivo.
+ * Clase encargada de instanciar el objeto estadistica para cada archivo.
+ *
  * @author Daniel Camacho
  */
 public class Rank 
@@ -11,6 +11,7 @@ public class Rank
     private int referencias;
     private int posicion;
     private String name;
+
     /**
      * Constructor de la clase Rank
      * @param dep numero de dependencias del archivo.
@@ -23,6 +24,7 @@ public class Rank
         this.referencias=ref;
         this.name=nam;
     }
+
     /**
      * Metodo que retorna el numero de referncias.
      *
@@ -32,6 +34,7 @@ public class Rank
     {
         return this.referencias;
     }
+
     /**
      * Metodo que retorna el numero de dependencias.
      *
@@ -41,6 +44,7 @@ public class Rank
     {
         return this.dependencias;
     }
+
     /**
      * Metodo que cambia la cantidad de referencias de un archivo.
      *
@@ -50,6 +54,7 @@ public class Rank
     {
         this.referencias=ref;
     }
+
     /**
      * Metodo que cambia la cantidad de dependencias de un archivo.
      *
@@ -59,6 +64,7 @@ public class Rank
     {
         this.dependencias=dep;
     }
+
     /**
      * Metodo que retorna la posicion en el ranking del archivo.
      *
@@ -68,6 +74,7 @@ public class Rank
     {
         return this.posicion;
     }
+
     /**
      * Metodo que modifica la posicion en el ranking del archivo.
      *
@@ -77,6 +84,7 @@ public class Rank
     {
         this.posicion= pos;
     }
+
     /**
      * Metodo para obtener el nombre del elemento en el ranking.
      *
@@ -86,10 +94,12 @@ public class Rank
     {
         return this.name;
     }
+
     public void setPosition(int x)
     {
         this.posicion=x;
     }
+
     public int getPosition()
     {
         return this.posicion;

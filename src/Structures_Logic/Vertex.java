@@ -30,6 +30,7 @@ public class Vertex{
     public LinkedList getListofRef(){
             return this.refList;
     }
+
     /**
      * Agrega una lista completa de referencias al vertice
      * @param l 
@@ -45,6 +46,7 @@ public class Vertex{
     public String getID(){
         return this.name;
     }
+
     /**
      * Retorna una lista enlazada con los vertices de clases y estos vertices
      * poseen una lista de referencias a otras clases , además de los métodos
@@ -54,13 +56,13 @@ public class Vertex{
     public LinkedClass getClassList(){
         return this.classList;
     }
+
     /**
      * Añade una lista de clases al atributo classList
      * @param l Lista añadir 
      */
     public void setClassList(LinkedClass l){
         this.classList = l;
-        
     }
         
         
