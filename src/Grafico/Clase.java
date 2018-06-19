@@ -62,11 +62,15 @@ public class Clase
     {
         return this.deps;
     }
+    public ClassList getRefs()
+    {
+        return this.refs;
+    }
     /**
      * Metodo para obtener el numero de referencias
      * @return int Referencias
      */
-    public int getRefs()
+    public int getRefNumb()
     {
         return this.refNum;
     }

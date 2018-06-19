@@ -50,7 +50,8 @@ public class MainWindow extends JFrame
     private JScrollPane scrollPane;
     private Graph grafo;
     private JButton Generate;
-    
+    private ClassList lista;
+    private JButton Stats;
     public MainWindow(String title,Image icono,Gestor gestor)
     {
         this.title=title;
@@ -83,6 +84,7 @@ public class MainWindow extends JFrame
         this.Complete= new JButton("Complete using Maven™");
         this.mainPanel= new JLayeredPane();
         this.Generate= new JButton("Generate!");
+        this.Stats= new JButton("JAR Statistics");
         Init();   
     }
     /**
@@ -168,6 +170,7 @@ public class MainWindow extends JFrame
                 try 
                 {
                     grafo.init(lastFile.toString(),lastFile.getName());
+                    lista= grafo.getListClass().ConvertToClassList();
                 } catch (IOException ex) 
                 {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -184,21 +187,24 @@ public class MainWindow extends JFrame
                 System.out.println(lastFile);
                Generate.setBackground(new Color(235,60,1));
                Generate.setEnabled(true);
+               Stats.setEnabled(true);
+               Stats.setBackground(new Color(0,184,0));
 
             }
         });
         Panel1.add(Add);
         
-        JButton Stats= new JButton("JAR Statistics");
-        Stats.setBackground(new Color(0,184,0));
+        
+        Stats.setBackground(Color.DARK_GRAY);
         Stats.setFont(Stats.getFont().deriveFont(Font.BOLD,28));
         Stats.setForeground(Color.BLACK);
         Stats.setBounds(0,165+65,300,65);
         Stats.setBorder(BorderFactory.createMatteBorder(4,4,4,0,backColor));
         Stats.setFocusPainted(false);
+        Stats.setEnabled(false);
         Stats.addActionListener(e->{
             dispose();
-            gestor.showStatics();
+            gestor.showStatics(lista);
         });
         Panel1.add(Stats);
         
@@ -215,7 +221,6 @@ public class MainWindow extends JFrame
                 Generate.setForeground(Color.BLACK);
                 Generate.setText("Generating...");
                 Generate.setEnabled(false);
-                ClassList lista= grafo.getListClass().ConvertToClassList();
                 
                 lista.printDepsCoords();
                 assignCoords(lista);
@@ -541,14 +546,23 @@ public class MainWindow extends JFrame
             }
             ind++;
         }
-    }
-    public void timeout()
-    {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        ind=0;
+        while(listaP.Get(ind)!=null)
+        {
+            Clase actual=listaP.Get(ind);
+            int ind2=0;
+            while(actual.getRefs().Get(ind2)!=null)
+            {
+                Clase refActual=actual.getRefs().Get(ind2);
+                if(listaP.inList(refActual.getName()))
+                {
+                    refActual.assignCoords(listaP.getCoordByName(refActual.getName(),"x"),listaP.getCoordByName(refActual.getName(),"y"));
+                }
+                ind2++;
             }
+            ind++;
+        }
     }
+    
     
 }

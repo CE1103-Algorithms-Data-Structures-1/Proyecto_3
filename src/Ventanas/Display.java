@@ -129,6 +129,15 @@ public class Display extends JFrame
                 indD++;
                 //this.repaint();
             }
+            indD=0;
+            while(actual.getRefs().Get(indD)!=null)
+            {
+                Clase depAct=actual.getRefs().Get(indD);
+                g2d.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                g2d.setColor(new Color(148,0,211));
+                g2d.drawLine(actual.getX()+actual.getXRcoord(),actual.getY()+15,actual.getRefs().Get(indD).getX(),actual.getRefs().Get(indD).getY());
+                indD++;
+            }
             JLabel label= new JLabel();
             label.setText(actual.getName());
             label.setFont(label.getFont().deriveFont(Font.ITALIC,12));

@@ -6,6 +6,7 @@
 package Ventanas;
 
 import Statics.Rank;
+import Structures_Interface.ClassList;
 import Structures_Interface.RankList;
 import java.awt.*;
 import java.io.*;
@@ -25,6 +26,8 @@ public class Statics extends JFrame
     private Gestor gestor;
     private JList depList;
     private JList refList;
+    private JScrollPane depscr;
+    private JScrollPane refscr;
     private RankList depends;
     private RankList refers;
     private DefaultListModel dep;
@@ -38,6 +41,8 @@ public class Statics extends JFrame
         this.ref= new DefaultListModel();
         this.depList= new JList(dep);
         this.refList= new JList(ref);
+        this.depscr= new JScrollPane(depList);
+        this.refscr= new JScrollPane(refList);
         this.depends= new RankList();
         this.refers= new RankList();
         this.Init();
@@ -113,13 +118,19 @@ public class Statics extends JFrame
         depList.setBounds(4,60,412,496);
         depList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
         depList.setForeground(Color.BLACK);
-        mostDep.add(depList);
+        this.depscr.setBounds(4,60,412,496);
+        this.depscr.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.depscr.setBorder(null);
+        mostDep.add(depscr);
         
         refList.setBackground(Color.DARK_GRAY);
         refList.setBounds(4,60,412,496);
         refList.setFont(depList.getFont().deriveFont(Font.BOLD,28));
         refList.setForeground(Color.BLACK);
-        mostRef.add(refList);
+        this.refscr.setBounds(4,60,412,496);
+        this.refscr.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.refscr.setBorder(null);
+        mostRef.add(refscr);
         
         
     }
@@ -127,43 +138,21 @@ public class Statics extends JFrame
      * Metodo para generar las listas de ranking.
      * @throws FileNotFoundException 
      */
-    public void generate() throws FileNotFoundException
+    public void generate(ClassList lista) 
    {
-        File file= new File("src\\Resources\\Estadisticas\\Dependencias.txt");
-        Scanner input = new Scanner(file);
-        while (input.hasNextLine()) 
-        {
-            String linea= input.nextLine();
-            String [] array= linea.split("@");
-            if(!linea.equals(""))
-            {
-            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
-            depends.add(elemento);
-            dep.addElement(elemento.getValue()+". "+elemento.getName()+": "+ elemento.getDep());
-            }
-        }
-        
-        File filer= new File("src\\Resources\\Estadisticas\\Referencias.txt");
-        Scanner inputr = new Scanner(filer);
-        while (inputr.hasNextLine()) 
-        {
-            String linea= inputr.nextLine();
-            String [] array= linea.split("@");
-            if(!linea.equals(""))
-            {
-            Rank elemento= new Rank(Integer.parseInt(array[0]),Integer.parseInt(array[1]),Integer.parseInt(array[2]),array[3]);
-            refers.add(elemento);
-            ref.addElement(elemento.getValue()+". "+elemento.getName()+": "+ elemento.getRef());
-            }
-            
-        }
-        try 
-        {
-            save();
-        } catch (IOException ex) 
-        {
-            Logger.getLogger(Statics.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       RankList rankd=lista.ConvertToRankList();
+       rankd=rankd.orderDep();
+       rankd.assignPosition();
+       rankd.printAll();
+       RankList rankr=lista.ConvertToRankList();
+       rankr=rankr.orderRef();
+       rankr.assignPosition();
+       rankr.printAll();
+       dep=rankd.toList("d");
+       ref=rankr.toList("r");
+       depList.setModel(dep);
+       refList.setModel(ref);
+       
         
         
    }
@@ -177,40 +166,6 @@ public class Statics extends JFrame
         depends.clear();
         refers.clear();
     }
-    /**
-     * Metodo para guardar el ranking.
-     */
-    public void save() throws FileNotFoundException, IOException
-    {
-        File file= new File("src/Resources/Estadisticas/Dependencias.txt");
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
-        writer.print("");
-        writer.close();
-        FileOutputStream fos = new FileOutputStream(file);
-	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-	int ind=0;
-        while(ind!=depends.getLen())
-        {
-            bw.write(depends.get(ind));
-            bw.newLine();
-            ind++;
-        }
-	bw.close();
-        
-        file= new File("src/Resources/Estadisticas/Referencias.txt");
-        writer = new PrintWriter(new FileWriter(file));
-        writer.print("");
-        writer.close();
-        fos = new FileOutputStream(file);
-	bw = new BufferedWriter(new OutputStreamWriter(fos));
-	ind=0;
-        while(ind!=refers.getLen())
-        {
-            bw.write(refers.get(ind));
-            bw.newLine();
-            ind++;
-        }
-	bw.close();
-    }
+    
     
 }

@@ -38,16 +38,10 @@ public class Gestor
         this.main.setVisible(true);
         this.main.goingBack();
     }
-    public void showStatics()
+    public void showStatics(ClassList c)
     {
-        try 
-        {
-            this.statics.refresh();
-            this.statics.generate();
-        } catch (Exception e) 
-        {
-            e.printStackTrace();
-        }
+        this.statics.refresh();
+        this.statics.generate(c);
         this.statics.setVisible(true);
     }
     public void showDisplay()

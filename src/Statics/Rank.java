@@ -17,11 +17,10 @@ public class Rank
      * @param ref numero de referencias del archivo.
      * @param pos posicion en el ranking.
      */
-    public Rank(int dep, int ref,int pos,String nam)
+    public Rank(int dep, int ref,String nam)
     {
         this.dependencias=dep;
         this.referencias=ref;
-        this.posicion=pos;
         this.name=nam;
     }
     /**
@@ -86,5 +85,13 @@ public class Rank
     public String getName()
     {
         return this.name;
+    }
+    public void setPosition(int x)
+    {
+        this.posicion=x;
+    }
+    public int getPosition()
+    {
+        return this.posicion;
     }
 }
