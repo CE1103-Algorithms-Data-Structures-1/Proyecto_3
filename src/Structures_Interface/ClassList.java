@@ -101,4 +101,81 @@ public class ClassList
         }
         return temp.getValue();
     }
+    /**
+     * Metodo para saber si un elemento con un nombre en especifico está en la lista.
+     * @param name String nombre
+     * @return 
+     */
+    public Boolean inList(String name)
+    {
+        ClassNode temp=this.Head;
+        while(temp!=null)
+        {
+            if(temp.getValue().getName().equals(name))
+            {
+                return true;
+            }
+            temp=temp.getNext();
+        }
+        return false;
+    }
+    /**
+     * Metodo para obtener coordenadas por nombre de clase.
+     * @param name String nombre de la clase.
+     * @param type String tipo de la coordenada.
+     * @return int coordenada.
+     */
+    public int getCoordByName(String name,String type)
+    {
+        if(type.equals("x"))
+        {
+            ClassNode temp=this.Head;
+            while(temp!=null)
+            {
+                if(temp.getValue().getName().equals(name))
+                {
+                    return temp.getValue().getX();
+                }
+                temp=temp.getNext();
+            }
+        }
+        else if(type.equals("y"))
+        {
+            ClassNode temp=this.Head;
+            while(temp!=null)
+            {
+                if(temp.getValue().getName().equals(name))
+                {
+                    return temp.getValue().getY();
+                }
+                temp=temp.getNext();
+            }
+            
+        }
+        return 0;
+    }
+    public void printDepsCoords()
+    {
+        ClassNode temp= this.Head;
+        while(temp!=null)
+        {
+            System.out.println("-------------------------------------------------------");
+            System.out.println(temp.getValue().getName());
+            System.out.println("Coordenadas: ("+temp.getValue().getX()+","+temp.getValue().getY()+")");
+            System.out.println("");
+            System.out.println("Dependencias: ");
+            ClassList depList=temp.getValue().getDeps();
+            int ind=0;
+            while(depList.Get(ind)!=null)
+            {
+                Clase temp2=depList.Get(ind);
+                System.out.println(temp2.getName());
+                System.out.println("Coordenadas: ("+temp2.getX()+","+temp2.getY()+")");
+                System.out.println("");
+                ind++;
+            }
+            temp=temp.getNext();
+            System.out.println("-------------------------------------------------------");
+        }
+    }
 }
